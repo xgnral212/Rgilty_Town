@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MYSTREY LIFE RP - السيرفر الأول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #E50914; /* أحمر ناري */
+            --secondary-color: #1A1A1A; /* أسود غامق */
+            --text-color: #F0F0F0; /* أبيض مائل للرمادي */
+            --light-text-color: #AAAAAA;
+            --button-hover-color: #FF2D3F;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--secondary-color);
+            padding: 20px 0;
+            border-bottom: 2px solid var(--primary-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-right: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 700;
+            transition: color 0.3s ease, transform 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background-color: var(--primary-color);
+            left: 50%;
+            bottom: -8px;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://via.placeholder.com/1920x1080/1A1A1A/E50914?text=MYSTREY+LIFE+RP+BACKGROUND') no-repeat center center/cover; /* يمكنك استبدال الصورة هنا */
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-color);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(229, 9, 20, 0.2) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInScale 1.5s ease-out forwards;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .hero h1 {
+            font-size: 4.5em;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-shadow: 0 0 15px rgba(229, 9, 20, 0.7);
+            animation: slideInLeft 1s ease-out forwards;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: slideInRight 1s ease-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            padding: 15px 35px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+        }
+
+        .btn:hover {
+            background-color: var(--button-hover-color);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.6);
+        }
+
+        section {
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+            z-index: 0;
+        }
+
+        section:nth-of-type(even) {
+            background-color: #0F0F0F; /* أسود أغمق قليلاً */
+            border-top: 1px solid var(--primary-color);
+            border-bottom: 1px solid var(--primary-color);
+        }
+
+        h2 {
+            font-size: 3.5em;
+            margin-bottom: 50px;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.4);
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 4px;
+            background-color: var(--primary-color);
+            left: 10%;
+            bottom: -10px;
+            border-radius: 5px;
+        }
+
+        /* About Section */
+        #about .content-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            text-align: right;
+        }
+
+        #about .text-content {
+            flex: 1;
+            min-width: 300px;
+            max-width: 700px;
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        #about p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: var(--light-text-color);
+        }
+
+        #about ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        #about ul li {
+            background-color: rgba(229, 9, 20, 0.1);
+            border-right: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        #about ul li:hover {
+            transform: translateX(-10px);
+            background-color: rgba(229, 9, 20, 0.2);
+        }
+
+        .image-mockup {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            background-color: rgba(229, 9, 20, 0.1);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(229, 9, 20, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInRight 1s ease-out forwards;
+        }
+
+        .image-mockup img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            animation: zoomIn 1.5s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Top Streamers Section */
+        #top-streamers .streamer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .streamer-card {
+            background-color: #222222;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid var(--primary-color);
+        }
+
+        .streamer-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(229, 9, 20, 0.5);
+        }
+
+        .streamer-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .streamer-info {
+            padding: 25px;
+        }
+
+        .streamer-info h3 {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .streamer-info p {
+            font-size: 1.1em;
+            color: var(--light-text-color);
+            margin-bottom: 20px;
+        }
+
+        .streamer-info .btn {
+            font-size: 1em;
+            padding: 10px 25px;
+        }
+
+        /* Store Section */
+        #store .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .store-item {
+            background-color: #222222;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid var(--primary-color);
+            position: relative;
+        }
+
+        .store-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(229, 9, 20, 0.1) 0%, transparent 60%);
+            z-index: 0;
+        }
+
+        .store-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(229, 9, 20, 0.5);
+        }
+
+        .item-header {
+            background-color: var(--primary-color);
+            padding: 15px;
+            color: var(--text-color);
+            font-size: 1.5em;
+            font-weight: 700;
+            border-bottom: 2px solid #FF2D3F;
+        }
+
+        .item-content {
+            padding: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .item-content img {
+            max-width: 80%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .item-content p {
+            font-size: 1.1em;
+            color: var(--light-text-color);
+            margin-bottom: 15px;
+        }
+
+        .item-price {
+            font-size: 2em;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        /* Social Links Section */
+        #social-links .links-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .social-link-card {
+            background-color: #222222;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            min-width: 250px;
+            max-width: 300px;
+            text-align: center;
+            border: 1px solid rgba(229, 9, 20, 0.5);
+        }
+
+        .social-link-card:hover {
+            transform: translateY(-8px);
+            background-color: #2A2A2A;
+            box-shadow: 0 12px 25px rgba(229, 9, 20, 0.6);
+        }
+
+        .social-link-card i {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .social-link-card h3 {
+            font-size: 1.6em;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .social-link-card a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .social-link-card a:hover {
+            color: var(--button-hover-color);
+            text-decoration: underline;
+        }
+
+        footer {
+            background-color: var(--secondary-color);
+            color: var(--light-text-color);
+            text-align: center;
+            padding: 30px 0;
+            border-top: 2px solid var(--primary-color);
+            font-size: 0.9em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* Hide for mobile, consider a hamburger menu */
+            }
+
+            .hero h1 {
+                font-size: 3em;
+            }
+
+            .hero p {
+                font-size: 1.2em;
+            }
+
+            h2 {
+                font-size: 2.5em;
+            }
+
+            #about .content-wrapper {
+                flex-direction: column;
+            }
+
+            .image-mockup, #about .text-content {
+                max-width: 100%;
+            }
+
+            .streamer-card, .store-item, .social-link-card {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">MYSTREY LIFE RP</div>
+                <ul class="nav-links">
+                    <li><a href="#about">عن السيرفر</a></li>
+                    <li><a href="#top-streamers">أفضل الستريمرز</a></li>
+                    <li><a href="#store">المتجر</a></li>
+                    <li><a href="#social-links">روابط مهمة</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>أهلاً بك في عالم MYSTREY LIFE RP</h1>
+            <p>انغمس في تجربة لعب أدوار لا مثيل لها، حيث قصتك تبدأ هنا.</p>
+            <a href="#social-links" class="btn">انضم إلينا الآن!</a>
+        </div>
+    </section>
+
+    <section id="about" class="container">
+        <h2>عن سيرفرنا</h2>
+        <div class="content-wrapper">
+            <div class="text-content">
+                <p>مرحباً بك في MYSTREY LIFE RP، الوجهة الأمثل لتجربة لعب أدوار (RolePlay) متكاملة ومثيرة. نحن نقدم لك عالماً افتراضياً مليئاً بالفرص والتحديات، حيث يمكنك أن تصبح أي شخص تريده وأن تخلق قصتك الخاصة.</p>
+                <p>سيرفرنا مبني على أساس مجتمع قوي ومتعاون، مع إدارة نشطة تهتم بتقديم أفضل تجربة ممكنة للاعبين. نحن نركز على:</p>
+                <ul>
+                    <li><strong>القصة العميقة:</strong> حرية تامة في بناء شخصيتك وتفاعلاتها.</li>
+                    <li><strong>الاقتصاد المتوازن:</strong> نظام اقتصادي واقعي ومنطقي.</li>
+                    <li><strong>الأحداث المستمرة:</strong> فعاليات وتحديثات دورية لإبقاء التجربة حماسية.</li>
+                    <li><strong>الدعم الفني:</strong> فريق دعم متواجد لمساعدتك في أي وقت.</li>
+                </ul>
+                <p>انضم إلينا اليوم وابدأ مغامرتك في MYSTREY LIFE RP!</p>
+            </div>
+            <div class="image-mockup">
+                <img src="https://cdn.discordapp.com/attachments/1313833598817800204/1320773528064102452/phonto.jpg?ex=685c1433&is=685ac2b3&hm=bfeff7c586bf53118d187c841dd1c1852f92d5f51001981c2210222f3d64c0b4&" alt="Gameplay Screenshot">
+            </div>
+        </div>
+    </section>
+
+    <section id="top-streamers" class="container">
+        <h2>أفضل الستريمرز في سيرفرنا</h2>
+        <p style="font-size: 1.2em; color: var(--light-text-color); margin-bottom: 40px;">شاهد أفضل اللقطات وأمتع الأوقات من نجوم مجتمعنا.</p>
+        <div class="streamer-grid">
+            <div class="streamer-card">
+                <img src="https://via.placeholder.com/400x200/1A1A1A/E50914?text=Streamer+1" alt="Streamer 1 Profile">
+                <div class="streamer-info">
+                    <h3>iTeX</h3>
+                    <p>صانع محتوى متميز، معروف بقصصه المثيرة وتفاعله مع الجمهور.</p>
+                    <a href="https://www.twitch.tv/itex__7" target="_blank" class="btn">شاهد البث</a>
+                </div>
+            </div>
+            <div class="streamer-card">
+                <img src="https://via.placeholder.com/400x200/1A1A1A/E50914?text=Streamer+2" alt="Streamer 2 Profile">
+                <div class="streamer-info">
+                    <h3>اسم الستريمر الثاني</h3>
+                    <p>متخصص في أحداث RP الكوميدية والمواقف الغير متوقعة.</p>
+                    <a href="https://www.youtube.com/yourstreamer2" target="_blank" class="btn">شاهد البث</a>
+                </div>
+            </div>
+            <div class="streamer-card">
+                <img src="https://via.placeholder.com/400x200/1A1A1A/E50914?text=Streamer+3" alt="Streamer 3 Profile">
+                <div class="streamer-info">
+                    <h3>اسم الستريمر الثالث</h3>
+                    <p>يتميز بالاحترافية في اللعب وتقديم قصص RP واقعية جداً.</p>
+                    <a href="https://www.twitch.tv/yourstreamer3" target="_blank" class="btn">شاهد البث</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="store" class="container">
+        <h2>متجر MYSTREY LIFE RP</h2>
+        <p style="font-size: 1.2em; color: var(--light-text-color); margin-bottom: 40px;">احصل على مزايا حصرية لتحسين تجربتك داخل السيرفر.</p>
+        <div class="store-grid">
+            <div class="store-item">
+                <div class="item-header">أولوية دخول السيرفر (Priority)</div>
+                <div class="item-content">
+                    <img src="https://via.placeholder.com/300x200/222222/E50914?text=Priority+Icon" alt="Priority Access">
+                    <p>احصل على أولوية الدخول للسيرفر، لتجنب طوابير الانتظار والانضمام مباشرة إلى اللعب.</p>
+                    <div class="item-price">200M كريدت</div>
+                    <button class="btn" onclick="redirectToDiscord()">شراء الآن</button>
+                </div>
+            </div>
+            <div class="store-item">
+                <div class="item-header">سيارة خاصة ون أوف ون (One-of-One Car)</div>
+                <div class="item-content">
+                    <img src="https://via.placeholder.com/300x200/222222/E50914?text=Unique+Car+Icon" alt="Unique Car">
+                    <p>امتلك سيارة فريدة من نوعها، بتصميم خاص لا يمتلكها أحد غيرك داخل السيرفر.</p>
+                    <div class="item-price">100M كريدت</div>
+                    <button class="btn" onclick="redirectToDiscord()">شراء الآن</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="social-links" class="container">
+        <h2>روابط مهمة</h2>
+        <p style="font-size: 1.2em; color: var(--light-text-color); margin-bottom: 40px;">تواصل معنا وابق على اطلاع بآخر الأخبار والتحديثات.</p>
+        <div class="links-grid">
+            <div class="social-link-card">
+                <i class="fab fa-discord"></i>
+                <h3>انضم إلى ديسكورد</h3>
+                <p>مجتمعنا النشط حيث يمكنك التحدث مع اللاعبين والإدارة.</p>
+                <a href="https://discord.gg/WvfeskSZ" target="_blank">رابط الديسكورد</a>
+            </div>
+            <div class="social-link-card">
+                <i class="fas fa-server"></i>
+                <h3>عنوان IP السيرفر</h3>
+                <p>انضم مباشرة إلى سيرفرنا في اللعبة.</p>
+                <a href="fivem://connect/YOUR_SERVER_IP_HERE" target="_blank">Connect (مثال: 123.45.67.89:30120)</a>
+            </div>
+            <div class="social-link-card">
+                <i class="fab fa-instagram"></i>
+                <h3>تابعنا على انستغرام</h3>
+                <p>شاهد لقطات حصرية وأخبار السيرفر.</p>
+                <a href="https://www.instagram.com/your_instagram_page" target="_blank">انستغرام</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 MYSTREY LIFE RP. جميع الحقوق محفوظة.</p>
+            <p>مصمم بـ ❤️ لعشاق الـ RolePlay.</p>
+        </div>
+    </footer>
+
+    <script>
+        function redirectToDiscord() {
+            // Replace with your actual Discord invite link
+            window.open('https://discord.gg/WvfeskSZ', '_blank');
+        }
+    </script>
+</body>
+</html>
