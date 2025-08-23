@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ملف شخصية: دربحه الدرابح</title>
+    <title>ملف شخصيات Respect RP</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Warm Neutrals -->
-    <!-- Application Structure Plan: تم تصميم التطبيق كهيكل تفاعلي من صفحة واحدة لعرض قصة الشخصية بشكل جذاب. بدلاً من السرد الخطي للتقرير الأصلي، تم تقسيم المحتوى إلى أقسام مواضيعية (نظرة عامة، السمات، القصة، الرمزية) مع شريط تنقل. هذا يسمح للمستخدم بالتنقل بحرية واستكشاف الجوانب التي تهمه. تم اختيار التفاعلات مثل المخطط الراداري للسمات والجدول الزمني التفاعلي للقصة لتحويل البيانات النوعية إلى تجربة بصرية وتفاعلية، مما يعزز فهم المستخدم وارتباطه بالقصة. -->
+    <!-- Application Structure Plan: تم تصميم التطبيق ليخدم شخصيات متعددة عبر قائمة تنقل علوية. عند اختيار شخصية، يقوم JavaScript بتحديث جميع الأقسام (نظرة عامة، القصة، الرمزية) بشكل ديناميكي. هذا يضمن تجربة مستخدم سلسة وتفاعلية، حيث يمكن التنقل بين قصص الشخصيات المختلفة دون إعادة تحميل الصفحة. تم اختيار هذا الهيكل لأنه قابل للتوسع بسهولة لإضافة المزيد من الشخصيات في المستقبل. -->
     <!-- Visualization & Content Choices: 
-        - السمات الرئيسية: الهدف (مقارنة وتوضيح) -> مخطط راداري (Chart.js) وأزرار تفاعلية. التبرير: المخطط يقدم لمحة بصرية سريعة عن قوة كل سمة، بينما تسمح الأزرار للمستخدم بالتركيز على كل سمة على حدة. هذا أكثر جاذبية من الجدول الثابت.
-        - محطات القصة: الهدف (عرض التسلسل الزمني) -> جدول زمني تفاعلي (HTML/CSS/JS). التبرير: يحول قائمة النقاط إلى رحلة سردية يمكن للمستخدم تتبعها خطوة بخطوة، مما يجعل القصة أكثر حيوية.
-        - المحتوى النصي: الهدف (إعلام) -> كتل نصية واضحة ومقتبسة. التبرير: عرض المعلومات الأساسية والاقتباسات بشكل بارز للحفاظ على وضوح الرسالة الأساسية للتقرير.
+        - التنقل بين الشخصيات: الهدف (تمكين التنقل بين الشخصيات) -> قائمة منسدلة (Dropdown) ومربعات نصية ديناميكية. التبرير: هذه الطريقة فعالة وموفرة للمساحة.
+        - السرد الزمني: الهدف (عرض التسلسل الزمني للأحداث) -> تسلسل زمني (Timeline) يتم إنشاؤه ديناميكيًا بواسطة JavaScript. التبرير: يحول القائمة إلى رحلة سردية بصرية يمكن للمستخدم تتبعها.
+        - المحتوى النصي: الهدف (إعلام) -> كتل نصية منظمة. التبرير: عرض المعلومات الأساسية والاقتباسات بشكل بارز للحفاظ على وضوح الرسالة.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -22,35 +21,38 @@
             font-family: 'Tajawal', sans-serif;
             scroll-behavior: smooth;
         }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: -1.25rem;
-            transform: translateY(-50%);
-            width: 1.25rem;
-            height: 1.25rem;
-            border-radius: 50%;
-            background-color: #A0522D;
-            border: 3px solid #F5F5DC;
+        .timeline-container {
+            position: relative;
         }
-        .timeline-line {
+        .timeline-container::before {
+            content: '';
             position: absolute;
             top: 0;
             bottom: 0;
-            right: -0.625rem;
+            right: 18px;
             width: 4px;
-            background-color: #D2B48C;
-            transform: translateX(50%);
+            background-color: #A0522D;
+        }
+        .timeline-event {
+            position: relative;
+            padding-right: 40px;
+            margin-bottom: 2.5rem;
+        }
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #EADDCA;
+            border: 4px solid #A0522D;
+            z-index: 10;
         }
         .nav-link.active {
             color: #A0522D;
             font-weight: 700;
-        }
-        .trait-btn.active {
-            background-color: #A0522D;
-            color: #FFFFFF;
-            transform: scale(1.05);
         }
     </style>
 </head>
@@ -59,20 +61,25 @@
     <header class="bg-[#EADDCA] sticky top-0 z-50 shadow-md">
         <nav class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
-                <div class="text-2xl font-black text-[#A0522D]">دربحه الدرابح</div>
-                <div class="hidden md:flex items-center space-x-8 lg:space-x-12">
-                    <a href="#overview" class="nav-link text-lg hover:text-[#A0522D] transition-colors duration-300">نظرة عامة</a>
-                    <a href="#traits" class="nav-link text-lg hover:text-[#A0522D] transition-colors duration-300">السمات</a>
-                    <a href="#story" class="nav-link text-lg hover:text-[#A0522D] transition-colors duration-300">القصة</a>
-                    <a href="#legacy" class="nav-link text-lg hover:text-[#A0522D] transition-colors duration-300">الرمزية</a>
-                </div>
-                 <div class="md:hidden">
-                    <select id="mobile-nav" class="bg-[#F5F5DC] border border-[#D2B48C] text-[#362706] text-sm rounded-lg focus:ring-[#A0522D] focus:border-[#A0522D] block w-full p-2.5">
-                        <option value="#overview">نظرة عامة</option>
-                        <option value="#traits">السمات</option>
-                        <option value="#story">القصة</option>
-                        <option value="#legacy">الرمزية</option>
+                <div class="text-2xl font-black text-[#A0522D]">ملف الشخصيات</div>
+                <div class="flex items-center space-x-4 lg:space-x-8">
+                    <select id="character-selector" class="bg-[#F5F5DC] border border-[#D2B48C] text-[#362706] text-sm rounded-lg focus:ring-[#A0522D] focus:border-[#A0522D] block w-full p-2.5">
+                        <option value="derbaha">دربحه الدرابح</option>
+                        <option value="kafa7">كافح المكافح</option>
+                        <option value="kharoush">خاروش بن مخرش</option>
                     </select>
+                    <div class="hidden md:flex items-center space-x-8 lg:space-x-12">
+                        <a href="#overview" class="nav-link text-lg hover:text-[#A0522D] transition-colors duration-300">نظرة عامة</a>
+                        <a href="#story" class="nav-link text-lg hover:text-[#A0522D] transition-colors duration-300">القصة</a>
+                        <a href="#legacy" class="nav-link text-lg hover:text-[#A0522D] transition-colors duration-300">الرمزية</a>
+                    </div>
+                     <div class="md:hidden">
+                        <select id="mobile-nav" class="bg-[#F5F5DC] border border-[#D2B48C] text-[#362706] text-sm rounded-lg focus:ring-[#A0522D] focus:border-[#A0522D] block w-full p-2.5">
+                            <option value="#overview">نظرة عامة</option>
+                            <option value="#story">القصة</option>
+                            <option value="#legacy">الرمزية</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -82,42 +89,12 @@
         
         <section id="overview" class="min-h-[60vh] flex items-center">
             <div class="w-full text-center">
-                <h1 class="text-5xl md:text-7xl font-black text-[#A0522D] mb-4">🪪 تعريف رسمي</h1>
-                <p class="text-xl md:text-2xl font-bold text-[#362706] mb-2">شخصية قيادية - زعيم سياسي وعسكري - دكتاتور ثوري</p>
+                <h1 id="character-title" class="text-5xl md:text-7xl font-black text-[#A0522D] mb-4"></h1>
+                <p id="character-classification" class="text-xl md:text-2xl font-bold text-[#362706] mb-2"></p>
                 <p class="text-lg text-gray-700 mb-8">من سيرفر <span class="font-bold text-[#A0522D]">Respect RP</span></p>
                 <div class="max-w-3xl mx-auto bg-[#EADDCA] p-6 rounded-xl shadow-lg">
                     <h2 class="text-2xl font-bold mb-3 text-[#A0522D]">نبذة مختصرة</h2>
-                    <p class="text-md md:text-lg leading-relaxed">
-                        دربحه الدرابح هو أحد أكثر الشخصيات تأثيراً وجدلًا في عالم Roleplay السعودي والخليجي، حيث جمع بين الكاريزما والقيادة الاستراتيجية والقسوة، ليصنع قصة لا تُنسى في عالم Respect RP. من قائد صارم إلى دكتاتور ملهم، مرورًا بانقلاب مدوي وتفجير نووي مدمّر، ترك بصمة لا تمحى في تاريخ السيرفر.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <div class="my-16 border-t-2 border-dashed border-[#D2B48C]"></div>
-
-        <section id="traits" class="py-16">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-[#A0522D]">السمات الرئيسية للشخصية</h2>
-                <p class="mt-2 text-lg text-gray-700">استكشف الأبعاد المختلفة لشخصية دربحه. انقر على كل سمة لعرض وصفها.</p>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="bg-[#EADDCA] p-6 rounded-xl shadow-lg">
-                    <div class="chart-container relative h-80 md:h-96 w-full max-w-lg mx-auto">
-                        <canvas id="traitsChart"></canvas>
-                    </div>
-                </div>
-                <div class="flex flex-col space-y-6">
-                    <div id="trait-description-container" class="bg-[#EADDCA] p-6 rounded-xl shadow-inner min-h-[150px] flex items-center justify-center">
-                        <p id="trait-description" class="text-lg text-center text-[#362706] font-semibold transition-opacity duration-500">اختر سمة من القائمة لعرض تفاصيلها هنا.</p>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                        <button class="trait-btn p-3 bg-[#D2B48C] rounded-lg font-bold hover:bg-[#A0522D] hover:text-white transition-all duration-300" data-trait="الذكاء">الذكاء</button>
-                        <button class="trait-btn p-3 bg-[#D2B48C] rounded-lg font-bold hover:bg-[#A0522D] hover:text-white transition-all duration-300" data-trait="الكاريزما">الكاريزما</button>
-                        <button class="trait-btn p-3 bg-[#D2B48C] rounded-lg font-bold hover:bg-[#A0522D] hover:text-white transition-all duration-300" data-trait="القسوة">القسوة</button>
-                        <button class="trait-btn p-3 bg-[#D2B48C] rounded-lg font-bold hover:bg-[#A0522D] hover:text-white transition-all duration-300" data-trait="السيطرة">السيطرة</button>
-                        <button class="trait-btn p-3 bg-[#D2B48C] rounded-lg font-bold hover:bg-[#A0522D] hover:text-white transition-all duration-300 col-span-2 sm:col-span-1" data-trait="الحسم النووي">الحسم النووي</button>
-                    </div>
+                    <p id="character-summary" class="text-md md:text-lg leading-relaxed"></p>
                 </div>
             </div>
         </section>
@@ -126,31 +103,10 @@
 
         <section id="story" class="py-16">
             <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-[#A0522D]">محطات بارزة في قصة دربحه</h2>
-                <p class="mt-2 text-lg text-gray-700">تتبع رحلة دربحه الدرابح من الصعود إلى النهاية الدرامية.</p>
+                <h2 id="story-heading" class="text-4xl font-black text-[#A0522D]"></h2>
+                <p class="mt-2 text-lg text-gray-700">تتبع رحلة الشخصية عبر أبرز محطات حياته.</p>
             </div>
-            <div class="relative max-w-2xl mx-auto">
-                <div class="timeline-line"></div>
-                <div class="space-y-12">
-                    <div class="timeline-item relative pr-10">
-                        <div class="bg-[#EADDCA] p-6 rounded-xl shadow-lg">
-                            <h3 class="text-2xl font-bold text-[#A0522D]">الصعود 🚀</h3>
-                            <p class="mt-2 text-md leading-relaxed">أسس نظام حكم صارم، وأصبح رمز القوة والسيطرة في المدينة، فارضًا هيمنته بقبضة من حديد.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item relative pr-10">
-                        <div class="bg-[#EADDCA] p-6 rounded-xl shadow-lg">
-                            <h3 class="text-2xl font-bold text-[#A0522D]">الانقلاب 💥</h3>
-                            <p class="mt-2 text-md leading-relaxed">تعرض لانقلاب من العساكر والمواطنين الذين رفضوا استبداده وطغيانه، مما أدى إلى زعزعة عرشه.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item relative pr-10">
-                        <div class="bg-[#EADDCA] p-6 rounded-xl shadow-lg">
-                            <h3 class="text-2xl font-bold text-[#A0522D]">النهاية ☢️</h3>
-                            <p class="mt-2 text-md leading-relaxed">في لحظة حاسمة ويائسة، فجّر المدينة بسلاح نووي، مخلفًا خلفه إرثًا دراميًا فريداً من الدمار والذكرى.</p>
-                        </div>
-                    </div>
-                </div>
+            <div id="timeline-content" class="max-w-3xl mx-auto timeline-container">
             </div>
         </section>
 
@@ -158,10 +114,7 @@
 
         <section id="legacy" class="py-16 text-center">
             <h2 class="text-4xl font-black text-[#A0522D] mb-8">الرمزية والإرث الخالد</h2>
-            <div class="max-w-3xl mx-auto bg-[#A0522D] text-white p-8 rounded-xl shadow-2xl italic">
-                <p class="text-xl md:text-2xl leading-loose">
-                    "دربحه الدرابح يرمز إلى السلطة المطلقة التي قد تتحول إلى طغيان، ونهاية هذا الطغيان التي قد تكون مدمرة، لكنه في الوقت ذاته، أسطورة خالدة في عالم Respect RP."
-                </p>
+            <div id="legacy-quote" class="max-w-3xl mx-auto bg-[#A0522D] text-white p-8 rounded-xl shadow-2xl italic">
             </div>
         </section>
 
@@ -176,104 +129,174 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const traitsData = {
-                'الذكاء': {
-                    description: 'استراتيجي بارع، يخطط بخطوات مدروسة بعناية.',
-                    score: 9
+            const charactersData = {
+                'derbaha': {
+                    title: '🪪 تعريف رسمي',
+                    name: 'دربحه الدرابح',
+                    classification: 'شخصية قيادية - زعيم سياسي وعسكري - دكتاتور ثوري',
+                    summary: 'دربحه الدرابح هو أحد أكثر الشخصيات تأثيراً وجدلًا في عالم Roleplay السعودي والخليجي، حيث جمع بين الكاريزما والقيادة الاستراتيجية والقسوة، ليصنع قصة لا تُنسى في عالم **Respect RP**.',
+                    storyHeading: 'قصة شخصية دربحه الدرابح',
+                    timeline: [
+                        {
+                            phase: 'المرحلة الأولى: الصعود والتأثير',
+                            events: [
+                                'تأسيس عصابة سوبيا: بدأت قصة دربحه بتأسيسه عصابة سوبيا، التي اشتهرت بـ"زعزعة الأمن" وارتكاب السرقات، ثم احتلت منطقة "ساندي شورس" تحت اسم "حزب الساو".',
+                                'تفكك الحزب: بعد تفكك العصابة أربع مرات، وفي المرة الأخيرة، وبعد سقوط "حزب الساو"، تلبس "جني" دربحه. هذا الجني منحه قدرات خارقة مثل الطيران والتجسس والتشكل، مما جعله يورط أعضاء عصابة سوبيا السابقين.',
+                                'التحول إلى رجل أعمال: بعد هذه الأحداث، تحوّل دربحه إلى مستثمر ثري، حيث امتلك محطة، وشركة اتصالات، وبقالة، تحت اسم "شركة البركة القابضة".',
+                                'كسب محبة الشعب: مع انتشار الفقر في المدينة، استخدم دربحه ثروته لكسب محبة الناس من خلال توزيع الأموال وتسديد مخالفاتهم، مما جعله شخصية شعبية للغاية.'
+                            ]
+                        },
+                        {
+                            phase: 'المرحلة الثانية: الحكم الدموي',
+                            events: [
+                                'تعيينه حاكمًا: بعد أن هتف الشعب باسمه، تم تعيين دربحه حاكمًا للمدينة، وهو ما يمثل بداية "الموسم الدموي".',
+                                'حملة "تنظيف المدينة": قام دربحه بتنفيذ حملة واسعة "لتنظيف المدينة"، حيث أعدم جميع المجرمين باستثناء رؤساء العصابات، الذين عفى عنهم وعينهم في مناصب عليا. هذا القرار أثار غضب قادة الشرطة، مما أدى إلى انقلابهم عليه.',
+                                'نهاية الحكم الأول: بعد صراعات عنيفة، قام دربحه بتفجير المدينة بالكامل.'
+                            ]
+                        },
+                        {
+                            phase: 'المرحلة الثالثة: العودة والانقلابات',
+                            events: [
+                                'العودة من جديد: في "الفصل الثاني"، عاد دربحه بشكل مفاجئ، حيث ظهر في السجن وأنقذته العصابات.',
+                                'استعادة الحكم: بعد خروجه، هدد القاضي حتى تم تعيينه حاكمًا مرة أخرى. ولكن، هذا الحكم لم يدم طويلًا.',
+                                'العزل والغضب: قام نائبه "عربيد الدلش" بعزله من الحكم بسبب "الكبر والحسد". غضب دربحه بشدة وقرر الانتقام.',
+                                'احتلال المدن: قام دربحه بجمع قوته واشترى عتادًا قويًا لمحاربة حكم "عربيد"، فاحتل المدن الكبرى (لوس، بلويتو، وساندي).',
+                                'الغيبوبة الأبدية: في ذروة صراعاته، عاد "الجن" ليأخذ دربحه إلى غيبوبة عميقة، لم يفق منها إلى الآن.'
+                            ]
+                        }
+                    ],
+                    legacyQuote: '<p class="text-xl md:text-2xl leading-loose">"دربحه الدرابح يرمز إلى السلطة المطلقة التي قد تتحول إلى طغيان، ونهاية هذا الطغيان التي قد تكون مدمرة، لكنه في الوقت ذاته، أسطورة خالدة في عالم **Respect RP**."</p>'
                 },
-                'الكاريزما': {
-                    description: 'يمتلك تأثيراً كبيراً على الجماهير واللاعبين.',
-                    score: 8
+                'kafa7': {
+                    title: '🪖 ملف شخصي',
+                    name: 'كافح المكافح',
+                    classification: 'ضابط شرطة - حامي العدالة - قائد عسكري',
+                    summary: 'كافح المكافح هو أحد أبرز شخصيات "ريسبكت" في مجال فرض القانون، يتميز بولائه الشديد للعدالة ونظرته الصارمة للجريمة، مما جعله يمر برحلة فريدة من نوعها في سبيل تحقيق العدالة.',
+                    storyHeading: 'قصة كافح المكافح: القصة الكاملة',
+                    timeline: [
+                        {
+                            phase: 'الموسم الأول: البداية المتواضعة',
+                            events: [
+                                'مقاتل مخلص: بدأ كافح كجندي عادي في الشرطة، لكنه كان يتميز بالصلابة والولاء الشديد للعدالة. كان يرى الأمور بالأبيض والأسود: إما أن تكون مع القانون أو ضده.',
+                                'الاختلاف مع القيادة: سرعان ما شعر بالإحباط من فساد بعض قادة الشرطة، الذين كانوا يفضلون التفاوض مع العصابات بدلاً من القضاء عليهم. هذا الإحباط كان هو الشرارة الأولى لتحوله.',
+                                'الخروج والانقلاب: قرر كافح أن العدالة يجب أن تُفرض بالقوة. فقام بالانقلاب على الشرطة، وخرج من صفوفها ليحارب الجريمة بطريقته الخاصة.'
+                            ]
+                        },
+                        {
+                            phase: 'الموسم الثاني: التخفي والعودة',
+                            events: [
+                                'العميل المزدوج: بعد خروجه من الشرطة، قام كافح بمهمة سرية: تظاهر بالانضمام إلى العصابات، وبدأ يجمع المعلومات عنهم من الداخل. كانت هذه المرحلة مليئة بالمخاطر، لكنه نجح في إسقاط العديد من العصابات من خلال المعلومات التي كان يجمعها.',
+                                'العودة إلى الشرطة: بعد نجاحه، عاد إلى صفوف الشرطة، لكن بشروط. أصر على أن يعمل وحده، وأن يفرض قوته دون تدخل من أحد. وبفضل إنجازاته، تمت ترقيته إلى رتبة نائب قائد الشرطة.'
+                            ]
+                        },
+                        {
+                            phase: 'الموسم الثالث: صراعات السلطة',
+                            events: [
+                                'الخلاف مع "أبو نجد": كانت هذه المرحلة هي الأكثر صراعًا، حيث نشبت خلافات كبيرة بينه وبين قائده "أبو نجد" بسبب اختلافهم في أسلوب التعامل مع الجريمة. كافح كان يرى أن الحل هو المواجهة، بينما كان "أبو نجد" يفضل الحلول الدبلوماسية.',
+                                'إعدام "العقرب": في ذروة الصراع، قام كافح بالقبض على "العقرب" وقرر إعدامه، مخالفًا بذلك أوامر القيادة. هذا الفعل تسبب في إيقافه عن العمل.',
+                                'تأسيس فصيل خاص: لم يستسلم كافح، فقام بتأسيس فصيل عسكري خاص به، وانتقل مع جنوده المخلصين إلى مدينة أخرى، ليواصل حربه ضد الجريمة.'
+                            ]
+                        },
+                        {
+                            phase: 'تكملة القصة: العودة والنهاية',
+                            events: [
+                                'العودة إلى المنصب: بعد محاكمة طويلة، تم تبرئة كافح وإعادته إلى منصبه برتبة عقيد.',
+                                'الترقية إلى قائد شرطة: في وقت لاحق، تمت ترقيته من قبل مصعب الحارثي ليصبح قائدًا للشرطة، ليعود إلى منصبه القيادي الذي فقده في الماضي، ولكن هذه المرة بأسلوب أكثر حكمة.'
+                            ]
+                        }
+                    ],
+                    legacyQuote: '<p class="text-xl md:text-2xl leading-loose">"قصة كافح ترمز إلى الولاء المطلق للعدالة، حتى لو كان ذلك يعني الوقوف ضد السلطة. إنه مثال على أن الكفاح المستمر يمكن أن يعيد الحق إلى نصابه."</p>'
                 },
-                'القسوة': {
-                    description: 'لا يتردد في اتخاذ قرارات حاسمة وصعبة.',
-                    score: 10
-                },
-                'السيطرة': {
-                    description: 'مهووس بالتحكم الكامل في كل مفاصل المدينة.',
-                    score: 9
-                },
-                'الحسم النووي': {
-                    description: 'النهاية الكبرى التي دمّرت المدينة بسلاح نووي.',
-                    score: 10
+                'kharoush': {
+                    title: '🔫 ملف شخصي',
+                    name: 'خاروش بن مخرش',
+                    classification: 'مجرم - زعيم عصابة - متمرد',
+                    summary: 'خاروش بن مخرش هو شخصية ظهرت في ليبرتي سيتي، وبدأت كشخصية بدائية، لكنه سرعان ما دخل عالم الإجرام ليصبح أحد أبرز رموزه ويسطر قصة مليئة بالمغامرات والصراعات.',
+                    storyHeading: 'قصة خاروش بن مخرش: القصة الكاملة',
+                    timeline: [
+                        {
+                            phase: 'الفصل الأول: البداية',
+                            events: [
+                                'النشأة والظهور الأول: نشأ خاروش في ليبرتي سيتي وظهر لأول مرة في الحديقة العامة، حيث كان صغير السن (مواليد 2010)، وبدأ كشخصية بدائية.',
+                                'دخول عالم الإجرام: بعد فترة، دخل خاروش عالم الإجرام وأصبح أيقونة فيه لأنه كان أول من يمتلك سلاحًا. قام بصدم العسكري أنور بن محمد وسرق عتاده العسكري، ومن هنا بدأت مسيرته الإجرامية.',
+                                'تأسيس العصابة: بدأ خاروش بجمع العصابات تحت مسمى واحد، وعين رئيسًا لهم يُدعى "بيرلس محمد" الملقب بـ"العقرب". وبعدها اختفى خاروش فجأة.'
+                            ]
+                        },
+                        {
+                            phase: 'الفصل الثاني: العودة والانتقام',
+                            events: [
+                                'العودة إلى لوس أنجلوس: عاد خاروش وانتقل إلى لوس سانتوس. كان أول عمل له هو جمع الأعضاء والعتاد لعمليته القادمة.',
+                                'الهجوم على المحكمة: قام بالهجوم على المحكمة وخطف القاضي. عندما جاءت الشرطة للتفاوض، قام بإعدام القاضي وخطف العسكري وقال له: "بلغ وقول تم إعدام القاضي وسيتم إعدام الآن".',
+                                'الانتصار: على الرغم من أن عددهم كان أربعة فقط في مواجهة عدد كبير من الشرطة، استطاع خاروش الفوز في المواجهة وإعدام القاضي والعسكري والخروج دون أي خسارة.'
+                            ]
+                        },
+                        {
+                            phase: 'الفصل الثالث: الثورة والفشل',
+                            events: [
+                                'تأسيس عصابة فوبيا: أنشأ عصابة "فوبيا" وأعلن للناس أنه ابن دربحة. كما أنشأ حزبًا وكتب كتابًا بهدف أن يصبح حاكمًا.',
+                                'الانقلاب والسجن: فشل خاروش في تحقيق حلمه، وانقلبت عليه العصابات (أتباعه في الحزب). وتم القبض عليه وودع السجن، لكنه تمكن من إخراج والده من السجن عن طريق التهريب.'
+                            ]
+                        }
+                    ],
+                    legacyQuote: '<p class="text-xl md:text-2xl leading-loose">"قصة خاروش ترمز إلى الطموح المتمرد الذي قد يتحول إلى فشل ذريع بسبب قلة الخبرة. إنه يجسد رحلة المجرم الذي يحاول بناء إمبراطورية ولكنه ينهار تحت ضغط أتباعه."</p>'
                 }
             };
 
-            const traitButtons = document.querySelectorAll('.trait-btn');
-            const traitDescriptionEl = document.getElementById('trait-description');
+            const characterSelector = document.getElementById('character-selector');
+            const characterTitle = document.getElementById('character-title');
+            const characterClassification = document.getElementById('character-classification');
+            const characterSummary = document.getElementById('character-summary');
+            const storyHeading = document.getElementById('story-heading');
+            const timelineContent = document.getElementById('timeline-content');
+            const legacyQuote = document.getElementById('legacy-quote');
+            
+            function renderCharacter(characterId) {
+                const data = charactersData[characterId];
+                if (!data) return;
 
-            traitButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const trait = button.dataset.trait;
+                characterTitle.textContent = data.title;
+                characterClassification.textContent = data.classification;
+                characterSummary.innerHTML = data.summary;
+                storyHeading.textContent = data.storyHeading;
+                legacyQuote.innerHTML = data.legacyQuote;
+                
+                timelineContent.innerHTML = '';
+                data.timeline.forEach(phaseData => {
+                    const phaseDiv = document.createElement('div');
+                    phaseDiv.className = 'timeline-event';
                     
-                    traitButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-
-                    traitDescriptionEl.style.opacity = 0;
-                    setTimeout(() => {
-                        traitDescriptionEl.textContent = traitsData[trait].description;
-                        traitDescriptionEl.style.opacity = 1;
-                    }, 300);
+                    const innerDiv = document.createElement('div');
+                    innerDiv.className = 'bg-[#EADDCA] p-6 rounded-xl shadow-lg';
+                    
+                    const phaseTitle = document.createElement('h3');
+                    phaseTitle.className = 'text-2xl font-bold mb-2 text-[#A0522D]';
+                    phaseTitle.textContent = phaseData.phase;
+                    innerDiv.appendChild(phaseTitle);
+                    
+                    const eventsList = document.createElement('ul');
+                    eventsList.className = 'list-disc list-inside space-y-3 pr-4';
+                    
+                    phaseData.events.forEach(eventText => {
+                        const listItem = document.createElement('li');
+                        const parts = eventText.split(':');
+                        if (parts.length > 1) {
+                            listItem.innerHTML = `<span class="font-bold">${parts[0]}:</span> ${parts.slice(1).join(':')}`;
+                        } else {
+                            listItem.textContent = eventText;
+                        }
+                        eventsList.appendChild(listItem);
+                    });
+                    
+                    innerDiv.appendChild(eventsList);
+                    phaseDiv.appendChild(innerDiv);
+                    timelineContent.appendChild(phaseDiv);
                 });
-            });
+            }
 
-            const ctx = document.getElementById('traitsChart').getContext('2d');
-            const traitsChart = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: Object.keys(traitsData),
-                    datasets: [{
-                        label: 'مستوى السمة',
-                        data: Object.values(traitsData).map(t => t.score),
-                        backgroundColor: 'rgba(160, 82, 45, 0.2)',
-                        borderColor: '#A0522D',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#A0522D',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#A0522D'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: {
-                                color: 'rgba(54, 39, 6, 0.3)'
-                            },
-                            grid: {
-                                color: 'rgba(54, 39, 6, 0.3)'
-                            },
-                            pointLabels: {
-                                font: {
-                                    family: "'Tajawal', sans-serif",
-                                    size: 14
-                                },
-                                color: '#362706'
-                            },
-                            ticks: {
-                                backdropColor: 'rgba(245, 245, 220, 0.7)',
-                                color: '#362706',
-                                stepSize: 2,
-                                font: {
-                                    weight: 'bold'
-                                }
-                            },
-                            suggestedMin: 0,
-                            suggestedMax: 10
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            titleFont: { family: "'Tajawal', sans-serif" },
-                            bodyFont: { family: "'Tajawal', sans-serif" },
-                        }
-                    }
-                }
+            renderCharacter('derbaha');
+
+            characterSelector.addEventListener('change', (event) => {
+                renderCharacter(event.target.value);
             });
             
             const navLinks = document.querySelectorAll('.nav-link');
