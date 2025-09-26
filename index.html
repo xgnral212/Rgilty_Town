@@ -1,1177 +1,388 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Molten Life</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Rgilty Town RP</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+        /* تعريف المتغيرات والألوان */
         :root {
-            --primary-color: #ef4444; /* red-500 */
-            --primary-hover-color: #dc2626; /* red-600 */
-            --secondary-color: #0c0c0c; /* almost black */
-            --card-bg-color: #1a1a1a;
-            --border-color: #2e2e2e;
-            --text-color: #f5f5f5;
-            --heading-color: #ef4444;
-            --glow-color: rgba(239, 68, 68, 0.5); /* red glow */
+            --primary-purple: #6a0dad;
+            --dark-purple: #4a097d;
+            --background-dark: #121212; /* خلفية داكنة جداً للفخامة */
+            --background-light: #1e1e1e; /* خلفية أقسام أفتح قليلاً */
+            --text-light: #f0f0f0;
+            --text-accent: #e0b4ff; /* بنفسجي فاتح للنصوص المميزة */
+            --button-hover: #8b3cbf;
         }
 
+        /* الأنماط الأساسية */
         body {
-            font-family: 'Tajawal', sans-serif;
+            font-family: 'Cairo', 'Poppins', sans-serif;
             margin: 0;
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            direction: rtl; /* Changed to RTL for Arabic */
-        }
-
-        .screen {
-            display: none;
-            width: 100%;
-            min-height: 100vh;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            animation: fadeIn 1s ease-in-out;
-        }
-        .screen.active {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .server-status {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 8px 16px;
-            border-radius: 9999px;
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.875rem;
-            letter-spacing: 0.05em;
-            z-index: 10;
-            box-shadow: 0 0 10px var(--glow-color);
-        }
-
-        .status-online {
-            background-color: #166534;
-            color: var(--text-color);
-        }
-
-        .status-offline {
-            background-color: var(--primary-color);
-            color: var(--text-color);
-        }
-
-        .status-maintenance {
-            background-color: #4338ca;
-            color: var(--text-color);
-        }
-
-        .sidebar {
-            width: 280px;
-            position: fixed;
-            top: 0;
-            right: -280px; /* Changed to right for RTL */
-            height: 100vh;
-            background-color: var(--card-bg-color);
-            border-left: 1px solid var(--border-color); /* Changed to left border */
-            transition: right 0.3s ease-in-out;
-            z-index: 20;
-            overflow-y: auto;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
-            /* Changed shadow direction */
+            padding: 0;
+            background-color: var(--background-dark);
+            color: var(--text-light);
+            direction: rtl;
+            line-height: 1.6;
+            scroll-behavior: smooth;
         }
         
-        .sidebar.active {
-            right: 0;
-        }
-
-        @media (min-width: 768px) {
-            .sidebar {
-                position: relative;
-                right: 0;
-            }
-            .main-content {
-                margin-right: 280px;
-                /* Changed margin direction */
-            }
-            .menu-button {
-                display: none;
-            }
-        }
-
-        .main-game-container {
-            display: flex;
-            flex-direction: row-reverse; /* Changed for RTL */
-            width: 100%;
-        }
-
-        .main-content {
-            flex-grow: 1;
-            padding: 2rem;
-            width: 100%;
-            overflow-y: auto;
-        }
-
-        .card {
-            background-color: var(--card-bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s ease-in-out;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: var(--text-color);
-            transition: all 0.2s ease-in-out;
-            border: none;
-            font-weight: 600;
-        }
-        .btn-primary:hover {
-            background-color: var(--primary-hover-color);
-            box-shadow: 0 0 15px var(--glow-color);
-        }
-
-        .input-field {
-            background-color: #2e2e2e;
-            border: 1px solid #4a4a4a;
-            color: var(--text-color);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease-in-out;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 5px var(--glow-color);
-        }
-
-        .sidebar-link {
-            transition: all 0.2s ease-in-out;
-            border-radius: 0.5rem;
-            padding: 0.75rem 1rem;
+        /* تأثير الخلفية البارالاكس مع التدرج البنفسجي */
+        .hero-section {
+            height: 100vh;
             display: flex;
             align-items: center;
-        }
-        .sidebar-link.active {
-            background-color: var(--primary-color);
-            color: var(--secondary-color);
-            box-shadow: 0 0 10px var(--glow-color);
-        }
-        .sidebar-link:hover {
-            background-color: var(--border-color);
-        }
-        .sidebar-link.active:hover {
-            background-color: var(--primary-hover-color);
-        }
-
-        .sidebar-link i {
-            width: 24px;
+            justify-content: center;
             text-align: center;
-            margin-left: 10px; /* Changed margin direction */
+            background-image: url('your-gta-background-image.jpg'); /* استبدل هذا بمسار صورتك */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* تأثير البارالاكس */
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* تدرج داكن وبنفسجي خفيف */
+            background: linear-gradient(135deg, rgba(74, 9, 125, 0.8), rgba(18, 18, 18, 0.85)); 
+            z-index: 2;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .job-button:disabled {
-            background-color: #212121;
-            color: #444444;
-            cursor: not-allowed;
-        }
-
-        .message-box {
+        /* الهيدر والقائمة العلوية */
+        header {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--card-bg-color);
-            border: 2px solid var(--primary-color);
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+            top: 0;
+            width: 100%;
+            background-color: rgba(18, 18, 18, 0.9); /* خلفية شبه شفافة */
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
             z-index: 100;
-            display: none;
-            text-align: center;
-            flex-direction: column;
-            align-items: center;
-            max-width: 400px;
+            backdrop-filter: blur(5px); /* تأثير ضبابي عصري */
         }
-        .message-box.visible {
+        .nav-container {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--primary-purple);
+            text-decoration: none;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1em;
+            padding: 5px 10px;
+            transition: color 0.3s, border-bottom 0.3s;
+        }
+        nav ul li a:hover {
+            color: var(--text-accent);
+            border-bottom: 2px solid var(--primary-purple);
+        }
+
+        /* محتوى القسم الرئيسي */
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 800px;
+            padding: 20px;
+        }
+        .hero-content h1 {
+            font-size: 4.5em;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+        }
+        .hero-content p {
+            font-size: 1.5em;
+            color: var(--text-accent);
+            margin-bottom: 40px;
+        }
+
+        /* الأقسام الداخلية */
+        section {
+            padding: 100px 20px;
+            text-align: center;
+            background-color: var(--background-light);
+            position: relative;
+        }
+        .section-title {
+            font-size: 3.5em;
+            color: var(--primary-purple);
+            margin-bottom: 60px;
+            font-weight: 700;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--text-accent);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        .description-text {
+            max-width: 900px;
+            margin: 0 auto 50px auto;
+            font-size: 1.1em;
+            color: #ccc;
+        }
+        .sub-heading {
+            color: var(--text-accent);
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+        
+        /* المتجر - تصميم البطاقات العصرية */
+        .store-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            justify-content: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .store-item {
+            background: var(--background-dark);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 2px solid var(--dark-purple);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .store-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(135deg, rgba(106, 13, 173, 0.1), rgba(0, 0, 0, 0));
+            z-index: 1;
+            transition: opacity 0.4s;
+        }
+        .store-item:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(106, 13, 173, 0.4);
+            border-color: var(--primary-purple);
+        }
+        .store-item:hover::before {
+            opacity: 0;
+        }
+        .store-item h3 {
+            color: var(--text-accent);
+            font-size: 1.8em;
+            margin-top: 0;
+        }
+        .store-item .price {
+            font-size: 2.2em;
+            color: var(--primary-purple);
+            font-weight: 700;
+            margin: 20px 0;
+            display: block;
+        }
+
+        /* تنسيق زر الشراء والانضمام */
+        .action-button {
+            background-color: var(--primary-purple);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .action-button:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(106, 13, 173, 0.5);
+        }
+
+        /* قسم الانضمام - تصميم مميز */
+        .join-section {
+            background: var(--background-dark);
+            padding: 120px 20px;
+        }
+        .join-info {
+            background-color: var(--background-light);
+            border: 1px solid var(--dark-purple);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 50px auto 0;
+            text-align: right;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        .join-info p {
+            color: #ddd;
+            margin: 15px 0;
+            font-size: 1.05em;
+        }
+        .join-info strong {
+            color: var(--text-accent);
+        }
+
+        /* الفوتر (أسفل الصفحة) */
+        footer {
+            background-color: var(--background-dark);
+            padding: 30px 0;
+            text-align: center;
+            border-top: 1px solid var(--dark-purple);
+            font-size: 0.9em;
+            color: #aaa;
+        }
+        footer p {
+            margin: 8px 0;
+            color: #aaa;
+        }
+        
+        /* تصميم الاستجابة */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 3em;
+            }
+            .hero-content p {
+                font-size: 1.2em;
+            }
+            .section-title {
+                font-size: 2.5em;
+            }
+            nav ul {
+                display: none; /* إخفاء القائمة العلوية في الجوال للتبسيط */
+            }
+            .nav-container {
+                justify-content: center;
+            }
+            .store-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="status-display" class="server-status"></div>
+    <header>
+        <div class="nav-container">
+            <a href="#hero" class="logo">Rgilty Town</a>
+            <nav>
+                <ul>
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#store">المتجر</a></li>
+                    <li><a href="#join">انضم إلينا</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <div id="message-box" class="message-box">
-        <h3 class="text-2xl font-bold mb-4" id="message-title" style="color: var(--heading-color);"></h3>
-        <p class="mb-6 text-gray-300" id="message-text"></p>
-        <button id="message-ok-btn" class="btn-primary py-3 px-6 rounded-xl font-bold">حسناً</button>
-    </div>
-
-    <div class="screen active" id="creation-screen">
-        <div class="card p-10 w-full max-w-xl border-2 border-red-700">
-     
-            <h1 class="text-5xl font-extrabold mb-8 text-center" style="color: var(--heading-color); text-shadow: 0 0 10px var(--glow-color);">Molten Life</h1>
-            <h2 class="text-2xl font-semibold mb-6 text-center text-gray-400">إنشاء شخصية جديدة</h2>
-            <form id="create-character-form" class="space-y-6">
-                <div>
-                    <label for="char-first-name" class="block text-sm font-medium text-gray-400">الاسم الأول</label>
-      
-                    <input type="text" id="char-first-name" required class="mt-2 block w-full input-field">
-                </div>
-                <div>
-                    <label for="char-last-name" class="block text-sm font-medium text-gray-400">الاسم الأخير</label>
-                    <input 
-type="text" id="char-last-name" required class="mt-2 block w-full input-field">
-                </div>
-                <div>
-                    <label for="char-birthplace" class="block text-sm font-medium text-gray-400">مكان الميلاد</label>
-                    <select id="char-birthplace" required class="mt-2 block w-full input-field">
-          
-                        <option value="sandy">Sandy Shores</option>
-                        <option value="los-santos">Los Santos</option>
-                        <option value="paleto">Paleto Bay</option>
-                    </select>
-            
-                </div>
-                <div>
-                    <label for="char-gender" class="block text-sm font-medium text-gray-400">الجنس</label>
-                    <select id="char-gender" required class="mt-2 block w-full input-field">
-                        <option value="male">ذكر</option>
-    
-                        <option value="female">أنثى</option>
-                    </select>
-                </div>
-                <div id="error-message" class="text-red-500 mt-4 text-sm hidden"></div>
-                <button type="submit" class="w-full py-4 px-6 rounded-xl 
-font-bold btn-primary text-xl">
-                    ابدأ حياتك الافتراضية
-                </button>
-            </form>
+    <div id="hero" class="hero-section">
+        <div class="hero-content">
+            <h1>عيش الفخامة في Rgilty Town</h1>
+            <p>سيرفر الحياة الواقعية RP الأفضل على **بلايستيشن 4 و 5** - حيث تبدأ قصتك.</p>
+            <a href="#join" class="action-button">انضم للمجتمع الآن</a>
         </div>
     </div>
 
-    <div class="screen hidden" id="main-game-container">
-        <button id="menu-toggle-button" class="md:hidden fixed top-4 right-4 z-30 p-3 rounded-md btn-primary text-lg">
-   
-             <i class="fa-solid fa-bars"></i>
-        </button>
-        <aside class="sidebar p-6 shadow-xl card">
-            <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">القائمة</h2>
-            <p id="user-id-display" class="text-xs text-center text-gray-500 mb-4"></p>
-            <ul class="space-y-3 text-right">
-                <li><a href="#character" data-page="character" class="sidebar-link"><i 
-class="fa-solid fa-user"></i> الشخصية</a></li>
-                <li><a href="#bank" data-page="bank" class="sidebar-link"><i class="fa-solid fa-bank"></i> البنك</a></li>
-                <li><a href="#inventory" data-page="inventory" class="sidebar-link"><i class="fa-solid fa-box"></i> الحقيبة</a></li>
-                <li><a href="#jobs" data-page="jobs" class="sidebar-link"><i class="fa-solid fa-briefcase"></i> الوظائف</a></li>
-                <li id="online-players-link" class="rank-required hidden" data-rank="police-field,police-affairs,admin"><a href="#online-players" data-page="online-players" class="sidebar-link"><i class="fa-solid fa-users"></i> المتواجدون</a></li>
-      
-            <li id="military-gear-link" class="rank-required hidden" data-rank="military,police-field,police-affairs,admin"><a href="#military-gear" data-page="military-gear" class="sidebar-link"><i class="fa-solid fa-gun"></i> العتاد العسكري</a></li>
-                <li id="police-affairs-link" class="rank-required hidden" data-rank="police-affairs,admin"><a href="#police-affairs" data-page="police-affairs" class="sidebar-link"><i class="fa-solid fa-building"></i> شؤون الشرطة</a></li>
-                <li><a href="#general-store" data-page="general-store" class="sidebar-link"><i class="fa-solid fa-store"></i> المتجر العام</a></li>
-                <li><a href="#real-estate-store" data-page="real-estate-store" class="sidebar-link"><i class="fa-solid fa-house"></i> العقارات</a></li>
-       
-                 <li><a href="#car-store" data-page="car-store" class="sidebar-link"><i class="fa-solid fa-car"></i> متجر السيارات</a></li>
-                <li id="add-product-link" class="rank-required hidden" data-rank="admin"><a href="#add-product" data-page="add-product" class="sidebar-link"><i class="fa-solid fa-plus-circle"></i> إضافة منتج</a></li>
-                <li id="admin-link" class="rank-required hidden" data-rank="admin"><a href="#admin" data-page="admin" class="sidebar-link text-yellow-400 font-bold"><i class="fa-solid fa-shield-halved"></i> لوحة التحكم</a></li>
-            </ul>
-        </aside>
-        
-        <main class="main-content">
-            <div id="character-page" class="page hidden card p-8">
-                <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">الشخصية</h2>
-                <div class="space-y-4 text-right">
-                    <p><strong>الاسم الكامل:</strong> <span id="char-full-name-display"></span></p>
-                   
-                    <p><strong>الرتبة:</strong> <span id="char-rank-display"></span></p>
-                    <p><strong>العمر:</strong> <span id="char-age-display"></span></p>
-                    <p><strong>مكان الميلاد:</strong> <span id="char-birthplace-display"></span></p>
-                    <p><strong>الجنس:</strong> <span id="char-gender-display"></span></p>
-                    <p><strong>الرصيد:</strong> <span id="balance-display">0</span> ريال سعودي</p>
-      
-                    <p><strong>الوظيفة:</strong> <span id="job-display">لا شيء</span></p>
-                    <p id="job-status-display" class="hidden text-sm text-gray-400"></p>
-                    <button id="leave-job-button" class="btn-primary py-3 px-6 rounded-xl font-semibold mt-4 hidden">اترك الوظيفة</button>
-                </div>
+    <section id="home">
+        <h2 class="section-title">لماذا Rgilty Town؟</h2>
+        <p class="description-text">
+            نحن ندمج بين المتعة القصوى والواقعية الصارمة لتقديم تجربة لعب لا مثيل لها. في **Rgilty Town**، كل قرار وكل تفاعل يحمل وزنه. اكتشف نظاماً اقتصادياً متكاملاً، مهن مفصلة، ومجتمعاً يسعى لقصص حقيقية. **نحن الجيل القادم للـ RP على بلايستيشن!**
+        </p>
+        <div style="max-width: 1000px; margin: 50px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+            <div class="store-item" style="padding: 25px;">
+                <h3 style="font-size: 1.5em; color: var(--primary-purple);">واقعية متناهية</h3>
+                <p>قوانين صارمة تحاكي الحياة الحقيقية لتجربة RP نقية.</p>
+            </div>
+            <div class="store-item" style="padding: 25px;">
+                <h3 style="font-size: 1.5em; color: var(--primary-purple);">اقتصاد حي</h3>
+                <p>أنظمة عمل وتجارة تسمح لك ببناء إمبراطوريتك الخاصة.</p>
+            </div>
+            <div class="store-item" style="padding: 25px;">
+                <h3 style="font-size: 1.5em; color: var(--primary-purple);">دعم للبلايستيشن</h3>
+                <p>مخصص بالكامل للاعبي PS4 و PS5 بأداء سلس ومميز.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="store">
+        <h2 class="section-title">متجر التميز</h2>
+        <p class="description-text">
+            ادعم السيرفر وعزز تجربتك بامتلاك العناصر الحصرية والأولوية التي تجعلك متفوقاً في كل جانب من جوانب الحياة في Rgilty Town.
+        </p>
+        <div class="store-container">
+
+            <div class="store-item">
+                <h3>سيارة 1-of-1 نادرة</h3>
+                <p>تحفة فنية، سيارة حصرية لن يمتلكها سواك. تميز مطلق في شوارع المدينة.</p>
+                <span class="price">150 $</span>
+                <a href="https://discord.gg/v49znvMraq" target="_blank" class="action-button">شراء الآن</a>
             </div>
 
-  
-            <div id="bank-page" class="page hidden card p-8">
-                <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">البنك</h2>
-                <div class="space-y-4 text-right">
-                    <p><strong>الرصيد الحالي:</strong> <span id="bank-balance-display">0</span> ريال سعودي</p>
-                    
-                    <p><strong>الودائع:</strong> <span id="bank-deposit-display">0</span> ريال سعودي</p>
-                    <p><strong>القروض:</strong> <span id="bank-loan-display">0</span> ريال سعودي</p>
-                </div>
-                <hr class="my-6" style="border-color: var(--border-color);">
-                <h3 class="text-xl font-semibold mb-4 text-center" style="color: var(--heading-color);">تحويل الأموال</h3>
-              
-                <form id="transfer-form" class="space-y-4 text-right">
-                    <div>
-                        <label for="transfer-amount" class="block text-sm font-medium text-gray-400">المبلغ</label>
-                        <input type="number" id="transfer-amount" required min="1" class="mt-2 block w-full input-field" style="direction: ltr;">
-            
-                    </div>
-                    <div>
-                        <label for="transfer-to" class="block text-sm font-medium text-gray-400">معرف المستلم (ID)</label>
-                        <input type="text" id="transfer-to" required class="mt-2 block w-full input-field" style="direction: ltr;">
-        
-                    </div>
-                    <button type="submit" class="w-full py-3 px-6 rounded-xl font-semibold btn-primary">تحويل</button>
-                </form>
-            </div>
-
-            <div id="inventory-page" class="page hidden card p-8">
-                
-                <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">الحقيبة</h2>
-                <ul id="inventory-list" class="space-y-3 text-right">
-                    </ul>
-            </div>
-
-            <div id="jobs-page" class="page hidden card p-8">
- 
-                <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">الوظائف المتاحة</h2>
-                <div id="job-buttons-container" class="space-y-4 text-right">
-                    </div>
-            </div>
-
-  
-            <div id="online-players-page" class="page hidden card p-8">
-                <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">اللاعبون المتواجدون</h2>
-                <ul id="online-players-list" class="space-y-3 text-right">
-                    </ul>
-  
-                <div id="police-radio" class="mt-6 p-6 rounded-xl card rank-required hidden" data-rank="police-field,police-affairs,admin">
-                    <h3 class="text-xl font-semibold mb-4" style="color: var(--heading-color);">راديو الشرطة</h3>
-                    <div id="radio-messages" class="h-48 overflow-y-auto card p-4 mb-4 text-sm text-right space-y-2">
-                       
-                        </div>
-                    <input type="text" id="radio-input" placeholder="اكتب رسالة..." class="w-full input-field">
-                </div>
-            </div>
-
-            <div id="military-gear-page" class="page hidden card p-8">
-    
-                 <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">العتاد العسكري</h2>
-                <div id="military-gear-items" class="space-y-3 text-right">
-                    </div>
-            </div>
-
-    
-            <div id="police-affairs-page" class="page hidden card p-8">
-                <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">شؤون الشرطة</h2>
-                <p class="text-gray-400 mb-4 text-center">هذا القسم خاص بالضباط فقط.</p>
-                <div id="police-affairs-list" class="space-y-3">
-                    <div class="card p-4 
-flex justify-between items-center flex-row-reverse">
-                        <span>بلاغ: سرقة متجر</span>
-                        <button class="btn-primary py-2 px-4 text-sm rounded-xl">متابعة</button>
-                    </div>
-                    <div class="card 
-p-4 flex justify-between items-center flex-row-reverse">
-                        <span>قضية: حادث سيارة</span>
-                        <button class="btn-primary py-2 px-4 text-sm rounded-xl">متابعة</button>
-                    </div>
-                </div>
-     
-            </div>
-
-            <div id="general-store-page" class="page hidden card p-8">
-                <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">المتجر العام</h2>
-                <div id="general-store-items" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-            </div>
-
-            <div id="real-estate-store-page" class="page hidden card p-8">
-  
-                <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">متجر العقارات</h2>
-                <div id="real-estate-store-items" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-            </div>
-
-            <div id="car-store-page" class="page hidden card p-8">
-                <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">متجر السيارات</h2>
-     
-                <div id="car-store-items" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-            </div>
-
-            <div id="add-product-page" class="page hidden card p-8">
-                <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--heading-color);">إضافة منتج</h2>
-                <p class="text-gray-400 mb-4 text-center">هذا يتطلب قاعدة بيانات للحفظ الدائم.</p>
-       
-                 <form id="add-product-form" class="space-y-4 text-right">
-                    <div>
-                        <label for="product-name" class="block text-sm font-medium text-gray-400">اسم المنتج</label>
-                        <input type="text" id="product-name" required class="mt-2 block w-full input-field">
-       
-                    </div>
-                    <div>
-                        <label for="product-price" class="block text-sm font-medium text-gray-400">السعر</label>
-                        <input type="number" id="product-price" required min="0" class="mt-2 block w-full input-field">
-      
-                    </div>
-                    <div>
-                        <label for="product-type" class="block text-sm font-medium text-gray-400">النوع</label>
-                        <select id="product-type" class="mt-2 block w-full input-field">
-        
-                            <option value="general">متجر عام</option>
-                            <option value="real-estate">عقار</option>
-                            <option value="car">سيارة</option>
-                    
-                        <option value="gear">عتاد عسكري</option>
-                            <option value="inventory">عنصر حقيبة</option>
-                        </select>
-                    </div>
-                
-                    <button type="submit" class="w-full py-3 px-6 rounded-xl font-semibold btn-primary">إضافة المنتج</button>
-                </form>
+            <div class="store-item">
+                <h3>الأولوية الكاملة (VIP)</h3>
+                <p>تضمن لك أسرع دخول للسيرفر، وأولوية في الدعم وفي جميع الأحداث القادمة.</p>
+                <span class="price">50 $</span>
+                <a href="https://discord.gg/v49znvMraq" target="_blank" class="action-button">شراء الآن</a>
             </div>
             
-            <div id="admin-page" class="page hidden card p-8">
-                <h2 class="text-3xl font-bold mb-6 text-center text-yellow-400">لوحة تحكم المسؤول</h2>
+        </div>
+        <p style="margin-top: 50px; font-size: 0.95em; color: #999;">
+            * جميع عمليات الشراء تتم عبر سيرفر الديسكورد. اضغط على الزر ليتم تحويلك.
+        </p>
+    </section>
+
+    <section id="join" class="join-section">
+        <h2 class="section-title">ابدأ قصتك اليوم</h2>
+        <p class="sub-heading">مجتمع Rgilty Town ينتظرك!</p>
         
-                 <div class="space-y-6 text-right">
-                    <p class="text-lg text-gray-300">أهلاً بك أيها المالك!
-                        يمكنك التحكم بخادم اللعبة من هنا.</p>
-                    <div class="card p-6">
-                        <h3 class="text-xl font-semibold mb-4" style="color: var(--heading-color);">حالة الخادم</h3>
-                        <p class="text-sm text-gray-400">غير حالة الخادم لإعلام اللاعبين.</p>
-             
-                        <select id="server-status-select" class="mt-4 block w-full input-field">
-                            <option value="online">متصل</option>
-                            <option value="offline">غير متصل</option>
-                         
-                            <option value="maintenance">صيانة</option>
-                        </select>
-                        <button id="update-server-status-btn" class="btn-primary py-3 px-6 rounded-xl font-semibold mt-4 w-full">تحديث الحالة</button>
-                    </div>
-                   
-  
-                    <div class="card p-6">
-                        <h3 class="text-xl font-semibold mb-4" style="color: var(--heading-color);">تعديل خصائص اللاعبين</h3>
-                        <form id="modify-player-form" class="space-y-4">
-                    
-                            <div>
-                                <label for="player-id-input" class="block text-sm font-medium text-gray-400">معرف اللاعب:</label>
-                                <input type="text" id="player-id-input" required class="mt-2 block w-full input-field" style="direction: ltr;">
-             
-                            </div>
-                            <div>
-                                <label for="money-amount-input" class="block text-sm font-medium text-gray-400">إضافة أموال (ريال سعودي):</label>
-                 
-                                <input type="number" id="money-amount-input" min="1" class="mt-2 block w-full input-field">
-                            </div>
-                            <div>
-                      
-                                <label for="player-rank-select" class="block text-sm font-medium text-gray-400">تغيير رتبة اللاعب:</label>
-                                <select id="player-rank-select" class="mt-2 block w-full input-field">
-                                    <option value="">لا يوجد تغيير</option>
-       
-                                     <option value="civilian">مدني</option>
-                                    <option value="admin">مسؤول</option>
-                                 
-                                    <option value="police-field">شرطي ميداني</option>
-                                    <option value="police-affairs">ضابط شؤون شرطة</option>
-                                </select>
-                        
-                            </div>
-                            <button type="submit" class="w-full py-3 px-6 rounded-xl font-semibold btn-primary">تطبيق التغييرات</button>
-                        </form>
-                    </div>
-                
-                </div>
-            </div>
+        <a href="https://discord.gg/v49znvMraq" target="_blank" class="action-button" style="font-size: 1.5em; padding: 20px 60px;">انضم إلينا الآن!</a>
 
-        </main>
-    </div>
+        <div class="join-info">
+            <h3 style="color: var(--primary-purple); font-size: 1.5em; text-align: center;">التواصل والروابط</h3>
+            <p><strong>الدعوة المباشرة:</strong> <a href="https://discord.gg/v49znvMraq" target="_blank" style="color: var(--text-accent); text-decoration: none;">https://discord.gg/v49znvMraq</a></p>
+            <p><strong>ديسكورد المالك:</strong> iTeX (مثال)</p>
+            <p><strong>تويتر/X:</strong> @RgiltyTownRP</p>
+        </div>
+    </section>
 
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-        import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, getDocs, runTransaction, query } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-        import { setLogLevel } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-        
-        setLogLevel('debug');
+    <footer>
+        <p><strong>رسالة ترحيب:</strong> نفخر بكل عضو ينضم إلينا. نتطلع لمستقبلك في Rgilty Town!</p>
+        <p>للتواصل والدعم: <strong>rgiltytown.contact@email.com</strong></p>
+        <p>جميع الحقوق محفوظة © لسيرفر Rgilty Town 2025.</p>
+    </footer>
 
-        // New firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCwzHVgI_koFwaHt5TflWn6aEzc4PIilTA",
-            authDomain: "servermolton.firebaseapp.com",
-            projectId: "servermolton",
-            storageBucket: "servermolton.firebasestorage.app",
-            messagingSenderId: "749219542285",
-            appId: "1:749219542285:web:0181be3c16e75e62b6ac44",
-            measurementId: "G-J38NK7WQS7"
-        };
-        
-        const __initial_auth_token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        const __app_id = typeof __app_id !== 'undefined' ?
-        __app_id : 'default-app-id';
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        
-        let character = null;
-        let userId = null;
-        let jobInterval = null;
-        const jobIntervalDuration = 30000;
-        // 30 seconds for simulation
-
-        const accessCodes = {
-            'policeman': '1211',
-            'police-affairs-officer': '2212'
-        };
-        const availableJobs = [
-            { id: 'trash', name: 'عامل نظافة', pay: 100, type: 'civilian' },
-            { id: 'tow', name: 'سائق سطحة', pay: 100, type: 'civilian' },
-            { id: 'taxi', name: 'سائق تكسي', pay: 100, type: 'civilian' },
-            { id: 'policeman', name: 'الشرطي', pay: 500, type: 'police-field' },
-          
-            { id: 'police-affairs-officer', name: 'شؤون الشرطة', pay: 500, type: 'police-affairs' }
-        ];
-        const storeProducts = {
-            'general': [
-                { name: 'هاتف ذكي', price: 2000, category: 'gadget' },
-                { name: 'كمبيوتر محمول', price: 5000, category: 'gadget' }
-            ],
-            'real-estate': [
-           
-                { name: 'شقة صغيرة', price: 500000, category: 'real-estate' },
-                { name: 'فيلا فاخرة', price: 2000000, category: 'real-estate' }
-            ],
-            'car': [
-                { name: 'سيارة سيدان', price: 80000, category: 'car' },
-              
-                { name: 'سيارة رياضية', price: 300000, category: 'car' }
-            ]
-        };
-        let serverStatus = 'online';
-        const serverStatusDisplay = document.getElementById('status-display');
-        const serverStatusSelect = document.getElementById('server-status-select');
-        const updateServerStatusBtn = document.getElementById('update-server-status-btn');
-
-        const creationScreen = document.getElementById('creation-screen');
-        const mainGameContainer = document.getElementById('main-game-container');
-        const createCharacterForm = document.getElementById('create-character-form');
-        const sidebarLinks = document.querySelectorAll('.sidebar-link');
-        const pages = document.querySelectorAll('.page');
-        const sidebar = document.querySelector('.sidebar');
-        const menuToggleButton = document.getElementById('menu-toggle-button');
-        const errorMessage = document.getElementById('error-message');
-        const rankRequiredLinks = document.querySelectorAll('.rank-required');
-        const modifyPlayerForm = document.getElementById('modify-player-form');
-        const userIdDisplay = document.getElementById('user-id-display');
-        const charFullNameDisplay = document.getElementById('char-full-name-display');
-        const charRankDisplay = document.getElementById('char-rank-display');
-        const charAgeDisplay = document.getElementById('char-age-display');
-        const charBirthplaceDisplay = document.getElementById('char-birthplace-display');
-        const charGenderDisplay = document.getElementById('char-gender-display');
-        const balanceDisplay = document.getElementById('balance-display');
-        const jobDisplay = document.getElementById('job-display');
-        const jobStatusDisplay = document.getElementById('job-status-display');
-        const leaveJobButton = document.getElementById('leave-job-button');
-
-        const bankBalanceDisplay = document.getElementById('bank-balance-display');
-        const bankDepositDisplay = document.getElementById('bank-deposit-display');
-        const bankLoanDisplay = document.getElementById('bank-loan-display');
-        const transferForm = document.getElementById('transfer-form');
-
-        const inventoryList = document.getElementById('inventory-list');
-        const jobButtonsContainer = document.getElementById('job-buttons-container');
-        const onlinePlayersList = document.getElementById('online-players-list');
-        const radioMessagesDiv = document.getElementById('radio-messages');
-        const radioInput = document.getElementById('radio-input');
-        const generalStoreItems = document.getElementById('general-store-items');
-        const realEstateStoreItems = document.getElementById('real-estate-store-items');
-        const carStoreItems = document.getElementById('car-store-items');
-        const addProductForm = document.getElementById('add-product-form');
-
-        const messageBox = document.getElementById('message-box');
-        const messageTitle = document.getElementById('message-title');
-        const messageText = document.getElementById('message-text');
-        const messageOkBtn = document.getElementById('message-ok-btn');
-
-        function showMessage(title, text) {
-            messageTitle.textContent = title;
-            messageText.textContent = text;
-            messageBox.classList.add('visible');
-        }
-
-        messageOkBtn.addEventListener('click', () => {
-            messageBox.classList.remove('visible');
-        });
-        function updateServerStatus() {
-            const statusText = serverStatus === 'online' ?
-            'متصل' : serverStatus === 'offline' ? 'غير متصل' : 'صيانة';
-            serverStatusDisplay.textContent = statusText;
-            serverStatusDisplay.className = `server-status status-${serverStatus}`;
-        }
-        
-        function getRankName(rank) {
-            switch (rank) {
-                case 'admin': return 'مالك (مسؤول)';
-                case 'police-field': return 'شرطي ميداني';
-                case 'police-affairs': return 'ضابط شؤون شرطة';
-                default: return 'مدني';
-            }
-        }
-
-        async function createCharacter(firstName, lastName, birthplace, gender) {
-            const fullName = `${firstName} ${lastName}`;
-            const age = Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-            const newCharacter = {
-                firstName: firstName,
-                lastName: lastName,
-                age: age,
-                birthplace: birthplace,
-                gender: gender,
-            
-                money: 1000,
-                bank: { balance: 0, deposit: 0, loan: 0 },
-                inventory: [],
-                job: null,
-                rank: 'civilian'
-            };
-            const userDocRef = doc(db, 'artifacts', __app_id, 'users', userId, 'character', 'data');
-            const publicUserDocRef = doc(db, 'artifacts', __app_id, 'public', 'players', userId);
-            await setDoc(userDocRef, newCharacter);
-            await setDoc(publicUserDocRef, {
-                fullName,
-                rank: newCharacter.rank,
-                money: newCharacter.money,
-                lastSeen: new Date()
-            });
-            showMessage('تم الإنشاء بنجاح', `تم إنشاء شخصيتك "${fullName}". يمكنك الآن بدء اللعب.`);
-        }
-
-        async function updateUI() {
-            if (!character) return;
-            charFullNameDisplay.textContent = `${character.firstName} ${character.lastName}`;
-            charAgeDisplay.textContent = character.age;
-            charBirthplaceDisplay.textContent = character.birthplace;
-            charGenderDisplay.textContent = character.gender;
-            balanceDisplay.textContent = character.money.toLocaleString();
-            charRankDisplay.textContent = getRankName(character.rank);
-            userIdDisplay.textContent = `معرّفك: ${userId}`;
-
-            if (character.job) {
-                jobDisplay.textContent = character.job.name;
-                leaveJobButton.classList.remove('hidden');
-            } else {
-                jobDisplay.textContent = 'لا شيء';
-                leaveJobButton.classList.add('hidden');
-            }
-
-            bankBalanceDisplay.textContent = character.money.toLocaleString();
-            bankDepositDisplay.textContent = character.bank.deposit.toLocaleString();
-            bankLoanDisplay.textContent = character.bank.loan.toLocaleString();
-            
-            rankRequiredLinks.forEach(link => {
-                const requiredRanks = link.dataset.rank.split(',');
-                if (requiredRanks.includes(character.rank)) {
-                    link.classList.remove('hidden');
-                } else {
-                    
-                    link.classList.add('hidden');
-                }
-            });
-            updateInventoryUI();
-            displayJobs();
-            displayStores();
-        }
-
-        function updateInventoryUI() {
-            inventoryList.innerHTML = '';
-            if (!character.inventory || character.inventory.length === 0) {
-                const li = document.createElement('li');
-                li.textContent = 'حقيبتك فارغة.';
-                li.classList.add('text-gray-400', 'text-center');
-                inventoryList.appendChild(li);
-                return;
-            }
-            character.inventory.forEach(item => {
-                const li = document.createElement('li');
-                li.className = 'card p-4 rounded-xl flex justify-between items-center flex-row-reverse';
-                li.innerHTML = `
-                 
-                    <span>${item.name}</span>
-                    <span class="text-sm text-gray-400">${item.price.toLocaleString()} ريال سعودي</span>
-                `;
-                inventoryList.appendChild(li);
-            });
-        }
-        
-        async function displayOnlinePlayers() {
-            const onlinePlayersList = document.getElementById('online-players-list');
-            onlinePlayersList.innerHTML = '';
-            const publicPlayersCol = collection(db, 'artifacts', __app_id, 'public', 'players');
-            const playerSnapshot = await getDocs(publicPlayersCol);
-            const players = playerSnapshot.docs.map(doc => doc.data());
-
-            if (players.length === 0) {
-                 const li = document.createElement('li');
-                li.className = 'text-gray-400 text-center';
-                 li.textContent = 'لا يوجد لاعبون متصلون.';
-                 onlinePlayersList.appendChild(li);
-                 return;
-            }
-
-            players.forEach(player => {
-                const li = document.createElement('li');
-                li.className = 'card p-4 rounded-xl flex justify-between items-center flex-row-reverse';
-                li.innerHTML = `
-                    <span>${player.fullName}</span>
-     
-                   <span class="text-sm text-gray-400">${getRankName(player.rank)}</span>
-                `;
-                onlinePlayersList.appendChild(li);
-            });
-        }
-
-        function displayJobs() {
-            jobButtonsContainer.innerHTML = '';
-            availableJobs.forEach(job => {
-                const button = document.createElement('button');
-                button.textContent = `انضمام: ${job.name} - الأجر: ${job.pay} ريال سعودي`;
-                button.classList.add('w-full', 'py-4', 'px-6', 'rounded-xl', 'font-bold', 'btn-primary', 'job-button');
-                button.dataset.jobId = job.id;
-               
-                button.disabled = character && character.job;
-                if (character && character.job && character.job.id === job.id) {
-                    button.textContent = 'تعمل حالياً...';
-                    button.disabled = true;
-                }
-          
-                button.addEventListener('click', () => {
-                    if (character && character.job) {
-                        showMessage('خطأ', 'يجب أن تترك وظيفتك الحالية أولاً.');
-                        return;
-             
-                    }
-
-                    if (job.type === 'police-field' || job.type === 'police-affairs') {
-                        const code = prompt(`أدخل رمز الوصول لوظيفة ${job.name}:`);
-                        if (code === accessCodes[job.id]) {
-                            joinJob(job);
-                        } else {
-                            showMessage('خطأ', 'رمز الوصول غير صحيح.');
-                        }
-                    } else {
-                        joinJob(job);
-                    }
-                });
-                jobButtonsContainer.appendChild(button);
-            });
-        }
-
-        async function joinJob(job) {
-            const userDocRef = doc(db, 'artifacts', __app_id, 'users', userId, 'character', 'data');
-            await setDoc(userDocRef, { job: job }, { merge: true });
-            
-            jobStatusDisplay.textContent = `أنت الآن تعمل ${job.name}.
-            ستستلم راتبك كل 30 ثانية.`;
-            jobStatusDisplay.classList.remove('hidden');
-
-            if (jobInterval) {
-                clearInterval(jobInterval);
-            }
-
-            jobInterval = setInterval(async () => {
-                try {
-                    await runTransaction(db, async (transaction) => {
-                        const charDoc = await transaction.get(userDocRef);
-             
-                        if (!charDoc.exists() || charDoc.data().job.id !== job.id) {
-                             clearInterval(jobInterval);
-                             return;
-                        }
- 
-                        const newMoney = charDoc.data().money + job.pay;
-                        transaction.update(userDocRef, { money: newMoney });
-                    });
-                } catch (e) {
-     
-                    console.error("Transaction failed: ", e);
-                }
-            }, jobIntervalDuration);
-            updateUI();
-        }
-
-        async function leaveJob() {
-            if (jobInterval) {
-                clearInterval(jobInterval);
-                jobInterval = null;
-            }
-            const userDocRef = doc(db, 'artifacts', __app_id, 'users', userId, 'character', 'data');
-            await setDoc(userDocRef, { job: null }, { merge: true });
-            jobStatusDisplay.textContent = '';
-            jobStatusDisplay.classList.add('hidden');
-        }
-
-        function displayStores() {
-            renderStore('general', generalStoreItems);
-            renderStore('real-estate', realEstateStoreItems);
-            renderStore('car', carStoreItems);
-            renderStore('gear', document.getElementById('military-gear-items'));
-        }
-
-        function renderStore(storeType, container) {
-            container.innerHTML = '';
-            const products = storeProducts[storeType];
-            if (!products || products.length === 0) {
-                const p = document.createElement('p');
-                p.textContent = 'لا توجد منتجات متاحة في هذا المتجر.';
-                p.classList.add('text-center', 'col-span-3', 'text-gray-400');
-                container.appendChild(p);
-                return;
-            }
-            products.forEach(product => {
-                const div = document.createElement('div');
-                div.classList.add('store-item', 'p-6', 'card', 'flex', 'flex-col', 'items-center', 'space-y-4');
-                div.innerHTML = `
-                    <h3 class="font-bold text-xl text-center" style="color: var(--heading-color);">${product.name}</h3>
-  
-                    <p class="text-md text-gray-400 text-center">السعر: ${product.price.toLocaleString()} ريال سعودي</p>
-                    <button class="buy-button w-full py-3 px-6 rounded-xl font-semibold btn-primary" data-price="${product.price}" data-product-name="${product.name}" data-product-type="${storeType}">
-                        شراء
-                    </button>
-  
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        async function buyProduct(name, price, type) {
-            if (!character || character.money < price) {
-                showMessage('فشل الشراء', 'لا تمتلك أموالاً كافية لشراء هذا المنتج.');
-                return;
-            }
-
-            const userDocRef = doc(db, 'artifacts', __app_id, 'users', userId, 'character', 'data');
-            try {
-                await runTransaction(db, async (transaction) => {
-                    const charDoc = await transaction.get(userDocRef);
-                    if (!charDoc.exists()) {
-                        throw "Character document does not exist!";
-   
-                    }
-
-                    const currentMoney = charDoc.data().money;
-                    const currentInventory = charDoc.data().inventory || [];
-                    
-               
-                    if (currentMoney >= price) {
-                        const newMoney = currentMoney - price;
-                        const newInventory = [...currentInventory, { name: name, price: price }];
-                        
-     
-                        transaction.update(userDocRef, {
-                            money: newMoney,
-                            inventory: newInventory
-                      
-                        });
-                        
-                        showMessage('تم الشراء بنجاح', `لقد اشتريت ${name} بنجاح!`);
-                    } else {
-                      
-                        showMessage('فشل الشراء', 'لا تمتلك أموالاً كافية لشراء هذا المنتج.');
-                    }
-                });
-            } catch (e) {
-                console.error("Transaction failed: ", e);
-                showMessage('فشل الشراء', 'حدث خطأ أثناء عملية الشراء.');
-            }
-        }
-
-        function showPage(pageId) {
-            pages.forEach(page => {
-                page.classList.remove('active');
-                page.classList.add('hidden');
-            });
-            const pageToShow = document.getElementById(`${pageId}-page`);
-            if (pageToShow) {
-                pageToShow.classList.remove('hidden');
-                pageToShow.classList.add('active');
-                if (pageId === 'online-players') {
-                    displayOnlinePlayers();
-                }
-            }
-
-            sidebarLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.dataset.page === pageId) {
-                    link.classList.add('active');
-                }
-  
-            });
-            if (window.innerWidth < 768) {
-                sidebar.classList.remove('active');
-            }
-        }
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                userId = user.uid;
-                userIdDisplay.textContent = `معرّفك: ${userId}`;
-                const userDocRef = doc(db, 'artifacts', __app_id, 'users', userId, 'character', 'data');
-    
-                onSnapshot(userDocRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        character = docSnap.data();
-                     
-                        creationScreen.classList.remove('active');
-                        mainGameContainer.classList.add('active');
-                        updateUI();
-                    } else {
-                        creationScreen.classList.add('active');
-   
-                        mainGameContainer.classList.remove('active');
-                    }
-                }, (error) => {
-                    console.error("Error listening to character document:", error);
-               
-                });
-            } else {
-                console.log("No user signed in. Attempting anonymous sign-in...");
-                signInAnonymously(auth).catch(e => console.error("Anonymous sign-in failed:", e));
-            }
-        });
-        createCharacterForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const firstName = document.getElementById('char-first-name').value.trim();
-            const lastName = document.getElementById('char-last-name').value.trim();
-            const charBirthplace = document.getElementById('char-birthplace').value;
-            const charGender = document.getElementById('char-gender').value;
-
-            const publicPlayersCol = collection(db, 'artifacts', __app_id, 'public', 'players');
-     
-            const playersSnapshot = await getDocs(query(publicPlayersCol));
-            const playerNames = playersSnapshot.docs.map(d => d.data().fullName);
-            if (playerNames.includes(`${firstName} ${lastName}`)) {
-                errorMessage.textContent = 'هذا الاسم مستخدم بالفعل، يرجى اختيار اسم آخر.';
-                errorMessage.classList.remove('hidden');
-                
-                return;
-            }
-            
-            await createCharacter(firstName, lastName, charBirthplace, charGender);
-        });
-
-        sidebarLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                showPage(link.dataset.page);
-            });
-        });
-        leaveJobButton.addEventListener('click', () => {
-            leaveJob();
-        });
-        updateServerStatusBtn.addEventListener('click', async () => {
-            const newStatus = serverStatusSelect.value;
-            const statusDocRef = doc(db, 'artifacts', __app_id, 'public', 'server', 'status');
-            await setDoc(statusDocRef, { status: newStatus });
-            showMessage('تم التحديث', `تم تحديث حالة الخادم إلى: ${newStatus}`);
-        });
-        onSnapshot(doc(db, 'artifacts', __app_id, 'public', 'server', 'status'), (docSnap) => {
-            if (docSnap.exists()) {
-                serverStatus = docSnap.data().status;
-                updateServerStatus();
-            }
-        }, (error) => {
-            console.error("Error listening to server status:", error);
-    
-        });
-
-        modifyPlayerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const playerId = document.getElementById('player-id-input').value.trim();
-            const moneyAmount = parseInt(document.getElementById('money-amount-input').value) || 0;
-            const newRank = document.getElementById('player-rank-select').value;
-            
-            const playerDocRef = doc(db, 'artifacts', __app_id, 'users', playerId, 
-            'character', 'data');
-            const publicPlayerDocRef = doc(db, 'artifacts', __app_id, 'public', 'players', playerId);
-
-            const updates = {};
-            if (moneyAmount > 0) {
-                updates.money = moneyAmount; // This needs to be a transaction for a real system
-            }
-       
-            if (newRank) {
-                updates.rank = newRank;
-            }
-
-            if (Object.keys(updates).length > 0) {
-                await setDoc(playerDocRef, updates, { merge: true });
-                await setDoc(publicPlayerDocRef, { rank: newRank }, { merge: true 
-            });
-                showMessage('تم التحديث', `تم تطبيق التغييرات على اللاعب بنجاح.`);
-            } else {
-                showMessage('خطأ', 'الرجاء إدخال مبلغ أو رتبة لتغييرها.');
-            }
-        });
-
-        addProductForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const productName = document.getElementById('product-name').value.trim();
-            const productPrice = parseFloat(document.getElementById('product-price').value);
-            const productType = document.getElementById('product-type').value;
-
-            const productDocRef = doc(collection(db, 'artifacts', __app_id, 'public', 'products'));
-           
-            await setDoc(productDocRef, {
-                name: productName,
-                price: productPrice,
-                type: productType
-            });
-            showMessage('تم الإضافة', `تمت إضافة "${productName}" بنجاح!`);
-            e.target.reset();
-     
-        });
-        
-        onSnapshot(collection(db, 'artifacts', __app_id, 'public', 'products'), (snapshot) => {
-            const products = {};
-            snapshot.docs.forEach(doc => {
-                const data = doc.data();
-                if (!products[data.type]) {
-                    products[data.type] = [];
- 
-                }
-                products[data.type].push(data);
-            });
-            storeProducts.general = products.general || [];
-            storeProducts['real-estate'] = products['real-estate'] || [];
-            storeProducts.car = products.car || [];
-         
-            storeProducts.gear = products.gear || [];
-            displayStores();
-        }, (error) => {
-            console.error("Error listening to products:", error);
-        });
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('buy-button')) {
-                const productName = e.target.dataset.productName;
-                const productPrice = parseFloat(e.target.dataset.price);
-                const productType = e.target.dataset.productType;
-                buyProduct(productName, productPrice, productType);
-        
-            }
-        });
-        transferForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const transferAmount = parseInt(document.getElementById('transfer-amount').value);
-            const transferToId = document.getElementById('transfer-to').value.trim();
-
-            if (transferAmount <= 0) {
-                 showMessage('خطأ', 'المبلغ يجب أن يكون أكبر من صفر.');
-              
-                return;
-            }
-
-            const senderDocRef = doc(db, 'artifacts', __app_id, 'users', userId, 'character', 'data');
-            const recipientDocRef = doc(db, 'artifacts', __app_id, 'users', transferToId, 'character', 'data');
-
-            try {
-                await runTransaction(db, async (transaction) => {
-         
-                    const senderDoc = await transaction.get(senderDocRef);
-                    const recipientDoc = await transaction.get(recipientDocRef);
-                    
-                    if (!senderDoc.exists()) {
-                   
-                        throw "Sender document does not exist!";
-                    }
-                    if (!recipientDoc.exists()) {
-                        throw "Recipient document does not exist!";
-                    }
-
-                    const senderMoney = senderDoc.data().money;
-                    if (senderMoney >= transferAmount) {
-                        const newSenderMoney = senderMoney - transferAmount;
-                        const newRecipientMoney = recipientDoc.data().money + transferAmount;
-
-                        transaction.update(senderDocRef, { money: newSenderMoney });
-                        transaction.update(recipientDocRef, { money: newRecipientMoney });
-                        showMessage('تم التحويل', `تم تحويل ${transferAmount} ريال سعودي بنجاح إلى ${recipientDoc.data().firstName} ${recipientDoc.data().lastName}.`);
-                    } else {
-                        showMessage('فشل التحويل', 'رصيدك غير كافٍ لإتمام العملية.');
-                    }
-                });
-            } catch (e) {
-                console.error("Transaction failed: ", e);
-                showMessage('فشل التحويل', 'حدث خطأ أثناء عملية التحويل. تأكد من أن المعرف صحيح.');
-            }
-            e.target.reset();
-        });
-        radioInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendRadioMessage();
-            }
-        });
-        async function sendRadioMessage() {
-            if (!character || !['police-field', 'police-affairs', 'admin'].includes(character.rank)) {
-                showMessage('مرفوض', 'لا يمكنك استخدام الراديو.');
-                return;
-            }
-            const message = radioInput.value.trim();
-            if (message) {
-                const radioDocRef = doc(collection(db, 'artifacts', __app_id, 'public', 'radio', 'messages'));
-                await setDoc(radioDocRef, {
-                    senderId: userId,
-                    senderName: `${character.firstName} ${character.lastName}`,
-                    text: message,
-                    timestamp: new Date()
-            
-                });
-                radioInput.value = '';
-            }
-        }
-        
-        onSnapshot(collection(db, 'artifacts', __app_id, 'public', 'radio', 'messages'), (snapshot) => {
-            radioMessagesDiv.innerHTML = '';
-            snapshot.docs.forEach(doc => {
-                const data = doc.data();
-             
-                const msgElement = document.createElement('p');
-                msgElement.className = 'text-sm text-gray-400';
-                msgElement.textContent = `${data.senderName} [راديو]: ${data.text}`;
-                radioMessagesDiv.appendChild(msgElement);
-            });
-            radioMessagesDiv.scrollTop = radioMessagesDiv.scrollHeight;
-        }, (error) => {
-  
-            console.error("Error listening to radio messages:", error);
-        });
-        menuToggleButton.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-        window.onload = function() {
-            updateServerStatus();
-            showPage('character');
-        };
-        if (__initial_auth_token) {
-            signInWithCustomToken(auth, __initial_auth_token)
-                .catch(e => {
-                    console.error("Custom token sign-in failed, falling back to anonymous:", e);
-                    signInAnonymously(auth);
-                });
-        } else {
-            signInAnonymously(auth);
-        }
-    </script>
 </body>
 </html>
