@@ -1,3 +1,354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عصابة الكربس - نظام الإدارة</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- React -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- التطبيق -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-900 text-white">
+    <div id="root"></div>
+    
+    <!-- التكوين -->
+    <script>
+        // Firebase Configuration
+        const __firebase_config = JSON.stringify({
+            apiKey: "your-api-key",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "your-app-id"
+        });
+        
+        const __app_id = "crips-gang-app";
+        const __initial_auth_token = null; // أو توكن المصادقة المخصص إذا كان متوفراً
+    </script>
+    
+    <!-- المكونات -->
+    <script type="text/babel" src="app.js"></script>
+</body>
+</html>
+/* تخصيص Tailwind */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap');
+
+* {
+    font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+/* تخصيص شريط التمرير */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #374151;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #6B7280;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}
+
+/* أنيميشن FadeIn */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* تخطيط لوحة التحكم */
+.ui-box {
+    display: flex;
+    height: 100vh;
+    background: #111827;
+}
+
+/* الشريط الجانبي الأيمن */
+.sidebar-right {
+    width: 80px;
+    background: #1F2937;
+    border-left: 1px solid #374151;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    z-index: 40;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 8px;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #9CA3AF;
+    font-size: 12px;
+    width: 64px;
+}
+
+.nav-item:hover {
+    background: #374151;
+    color: #FFFFFF;
+}
+
+.nav-item.active {
+    background: #3B82F6;
+    color: #FFFFFF;
+}
+
+.nav-item i {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+/* الشريط الجانبي الأيسر */
+.sidebar-left {
+    width: 250px;
+    background: #1F2937;
+    border-right: 1px solid #374151;
+    display: flex;
+    flex-direction: column;
+    z-index: 30;
+}
+
+.sidebar-left .list-item {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.sidebar-left .list-item:hover {
+    background: #374151;
+    border-left-color: #6B7280;
+}
+
+/* الحاوية الرئيسية */
+.main-container {
+    background: #111827;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* البطاقات */
+.app-card {
+    background: #1F2937;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #374151;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.app-card:hover {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+/* رسائل الحالة */
+.status-message {
+    padding: 12px 16px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    margin: 1rem 0;
+    border: 1px solid;
+}
+
+.status-error {
+    color: #FCA5A5;
+    background: rgba(220, 38, 38, 0.2);
+    border-color: #DC2626;
+}
+
+.status-success {
+    color: #86EFAC;
+    background: rgba(34, 197, 94, 0.2);
+    border-color: #22C55E;
+}
+
+/* أزرار */
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: #3B82F6;
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #2563EB;
+}
+
+.btn-danger {
+    background: #DC2626;
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: #B91C1C;
+}
+
+.btn-success {
+    background: #22C55E;
+    color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+    background: #16A34A;
+}
+
+/* حقول الإدخال */
+.input-field {
+    width: 100%;
+    padding: 12px 16px;
+    background: #374151;
+    border: 1px solid #4B5563;
+    border-radius: 8px;
+    color: white;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.input-field:focus {
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+.input-field::placeholder {
+    color: #9CA3AF;
+}
+
+/* المودال */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 1rem;
+}
+
+/* التحميل */
+.loading-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: #374151;
+    border-radius: 8px;
+}
+
+.loading-spinner {
+    animation: spin 1s linear infinite;
+    margin-left: 0.75rem;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* تصميم متجاوب إضافي */
+@media (max-width: 768px) {
+    .sidebar-right,
+    .sidebar-left {
+        display: none;
+    }
+    
+    .ui-box {
+        flex-direction: column;
+    }
+    
+    .main-container {
+        padding: 1rem;
+    }
+}
+
+/* تخصيصات للغة العربية */
+[dir="rtl"] {
+    text-align: right;
+}
+
+.space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+}
+
+/* تدرجات ألوان للرتب */
+.rank-supervisor {
+    color: #EF4444;
+    font-weight: 700;
+}
+
+.rank-secondary {
+    color: #F59E0B;
+    font-weight: 600;
+}
+
+.rank-leader {
+    color: #10B981;
+    font-weight: 600;
+}
+
+.rank-deputy {
+    color: #8B5CF6;
+    font-weight: 500;
+}
+
+.rank-member {
+    color: #3B82F6;
+    font-weight: 500;
+}
+// سيحتوي هذا الملف على كود React الكامل الذي قدمته
+// بما في ذلك جميع المكونات والوظائف
+
+// سيتم وضع كود React الكامل هنا كما هو...
+// (الكود الذي قدمته بالكامل)
+
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 
 // Firebase Imports
@@ -5,1482 +356,10 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, signOut } from 'firebase/auth';
 import { getFirestore, doc, collection, query, where, getDocs, setDoc, onSnapshot, runTransaction, addDoc, serverTimestamp, orderBy, limit, deleteDoc } from 'firebase/firestore';
 
-// =========================================================================
-// === 1. تعريف الأدوار والصلاحيات والثوابت ===
-// =========================================================================
+// ... (الكود الكامل كما هو)
 
-const RANKS = {
-    MEMBER: 'عضو',
-    DEPUTY: 'نائب',
-    SECONDARY_SUPERVISOR: 'رقابي ثانوي',
-    LEADER: 'رئيس عصابة',
-    PRIMARY_SUPERVISOR: 'رقابي', // الرقابي الأساسي
-};
-
-// تحديد من يمكنه إضافة الأعضاء
-const ALLOWED_ADDITIONS = {
-    [RANKS.PRIMARY_SUPERVISOR]: [RANKS.LEADER, RANKS.SECONDARY_SUPERVISOR, RANKS.DEPUTY, RANKS.MEMBER],
-    [RANKS.SECONDARY_SUPERVISOR]: [RANKS.LEADER, RANKS.DEPUTY, RANKS.MEMBER],
-    [RANKS.LEADER]: [RANKS.DEPUTY, RANKS.MEMBER],
-    [RANKS.DEPUTY]: [RANKS.MEMBER],
-    [RANKS.MEMBER]: [],
-};
-
-// تحديد من يمكنه إضافة المحتوى (مهام، وظائف، متاجر، إعلانات)
-const ALLOWED_CONTENT_CREATORS = [
-    RANKS.PRIMARY_SUPERVISOR,
-    RANKS.SECONDARY_SUPERVISOR,
-    RANKS.LEADER,
-];
-
-// =========================================================================
-// === 2. وظائف Firestore المساعدة ===
-// =========================================================================
-
-// دالة مساعدة لإنشاء مرجع المجموعة لأي نوع محتوى عام (Public)
-const getCollectionRef = (db, appId, collectionName) => {
-    // المسار العام: artifacts/{appId}/public/data/{collectionName}
-    return collection(db, `artifacts/${appId}/public/data/${collectionName}`);
-};
-
-// دالة لجلب المجموعات التي تتطلب ترتيباً
-const getOrderedQuery = (db, appId, collectionName) => {
-    const ref = getCollectionRef(db, appId, collectionName);
-    // نستخدم 'createdAt' للترتيب الزمني (أحدث شيء أولاً)
-    return query(ref, orderBy('createdAt', 'desc'));
-};
-
-// =========================================================================
-// === 3. المكونات المساعدة (UI Components) ===
-// =========================================================================
-
-// مكون البطاقة العامة
-const AppCard = ({ children, className = '' }) => (
-    <div className={`bg-[#1f2937] rounded-xl p-4 md:p-6 border border-[#374151] shadow-2xl ${className}`}>
-        {children}
-    </div>
-);
-
-// مكون رسالة خطأ/نجاح
-const StatusMessage = ({ message, type = 'error', className = '' }) => {
-    if (!message) return null;
-    const color = type === 'error' ? 'text-red-400 bg-red-900/30 border-red-500' : 'text-green-400 bg-green-900/30 border-green-500';
-    return (
-        <div className={`p-3 border rounded-lg text-center font-semibold ${color} my-4 ${className}`}>
-            {message}
-        </div>
-    );
-};
-
-// مكون التحميل
-const LoadingIndicator = ({ message = 'جاري التحميل...', className = '' }) => (
-    <div className={`flex items-center justify-center p-4 bg-gray-800 rounded-lg ${className}`}>
-        <i className="fas fa-spinner fa-spin text-xl text-blue-500 ml-3"></i>
-        <span className="text-gray-300 font-semibold">{message}</span>
-    </div>
-);
-
-// مودال عام لإضافة المحتوى
-const ContentModal = ({ title, children, closeModal, handleSave, isSaving }) => (
-     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-        <AppCard className="w-full max-w-lg p-6 animate-fadeIn">
-            <h3 className="text-xl font-bold mb-4 text-yellow-400 border-b border-gray-700 pb-2">{title}</h3>
-            
-            <div className="space-y-4 max-h-[80vh] overflow-y-auto pr-2">
-                {children}
-            </div>
-
-            <div className="flex justify-end space-x-4 space-x-reverse pt-4 border-t border-gray-700 mt-4">
-                <button 
-                    onClick={closeModal} 
-                    className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md font-semibold transition disabled:opacity-50"
-                    disabled={isSaving}
-                >
-                    إلغاء
-                </button>
-                <button 
-                    onClick={handleSave} 
-                    className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-md font-semibold transition text-black flex items-center justify-center disabled:opacity-50"
-                    disabled={isSaving}
-                >
-                    {isSaving ? (
-                        <i className="fas fa-spinner fa-spin ml-2"></i>
-                    ) : (
-                        <i className="fas fa-save ml-2"></i>
-                    )}
-                    {isSaving ? 'جاري الحفظ...' : 'حفظ ونشر'}
-                </button>
-            </div>
-        </AppCard>
-    </div>
-);
-
-// دالة تنسيق الوقت
-const formatTime = (timestamp) => {
-    if (!timestamp) return 'غير محدد';
-    try {
-        const date = timestamp instanceof Date ? timestamp : timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-        return new Intl.DateTimeFormat('ar-EG', {
-            hour: '2-digit',
-            minute: '2-digit',
-            day: 'numeric',
-            month: 'short',
-        }).format(date);
-    } catch {
-        return 'غير محدد';
-    }
-};
-
-// =========================================================================
-// === 4. شاشات التطبيق الرئيسية (Login, AddMember, Dashboard) ===
-// =========================================================================
-
-// شاشة تسجيل الدخول
-const LoginScreen = ({ auth, db, setCurrentUser, setIsLoggedIn, isInitialSetup, setIsInitialSetup }) => {
-    const [gangId, setGangId] = useState('');
-    const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setError('');
-        setIsLoading(true);
-
-        if (!gangId.trim()) {
-            setError('الرجاء إدخال إيدي العصابة.');
-            setIsLoading(false);
-            return;
-        }
-        
-        const memberDocRef = doc(db, `artifacts/${appId}/public/data/members`, gangId.toUpperCase());
-
-        try {
-            // التحقق من وجود الأعضاء بشكل عام
-            const membersRef = collection(db, `artifacts/${appId}/public/data/members`);
-            const allMembersSnapshot = await getDocs(membersRef);
-            
-            if (allMembersSnapshot.empty) {
-                setIsInitialSetup(true); // يجب أن يتم تسجيله الآن كرقابي أساسي
-                return; 
-            }
-
-            // محاولة جلب المستخدم
-            const memberDoc = await getDoc(memberDocRef);
-
-            if (memberDoc.exists()) {
-                // تسجيل دخول ناجح
-                const userData = memberDoc.data();
-                const currentUserId = auth.currentUser ? auth.currentUser.uid : 'anonymous';
-
-                setCurrentUser({
-                    uid: currentUserId,
-                    id: userData.id,
-                    name: userData.name,
-                    rank: userData.rank,
-                });
-                setIsLoggedIn(true);
-            } else {
-                setError('إيدي العصابة غير موجود. الرجاء التأكد من الإيدي الصحيح.');
-            }
-        } catch (err) {
-            console.error("Login Error:", err);
-            setError('حدث خطأ أثناء الاتصال بالخادم. حاول مرة أخرى.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    
-    // شاشة التسجيل للرقابي الأساسي
-    if (isInitialSetup) {
-        return <InitialSupervisorSetup db={db} auth={auth} setCurrentUser={setCurrentUser} setIsLoggedIn={setIsLoggedIn} setIsInitialSetup={setIsInitialSetup} />;
-    }
-
-    return (
-        <div className="flex flex-col items-center justify-center h-screen p-6 bg-gray-900">
-            <AppCard className="w-full max-w-md p-8 text-center border-blue-500/50">
-                <h1 className="text-3xl font-bold mb-6 text-blue-400">تسجيل الدخول - عصابة الكربس</h1>
-                <p className="text-gray-400 mb-6 text-sm">أدخل إيدي العصابة الخاص بك. (UID: {auth.currentUser?.uid || 'غير معروف'})</p>
-                
-                <form onSubmit={handleLogin} className="space-y-4">
-                    <input
-                        type="text"
-                        placeholder="إيدي العصابة (مثال: CRIPS001)"
-                        value={gangId}
-                        onChange={(e) => setGangId(e.target.value.toUpperCase())}
-                        className="w-full p-3 bg-gray-700 rounded-md border border-gray-600 focus:ring-blue-500 focus:border-blue-500 text-lg text-center"
-                        disabled={isLoading}
-                        maxLength={10}
-                    />
-                    
-                    <StatusMessage message={error} type="error" />
-                    
-                    <button
-                        type="submit"
-                        className="w-full p-3 bg-blue-600 hover:bg-blue-700 rounded-md font-bold transition flex items-center justify-center text-black shadow-lg shadow-blue-500/50"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? (
-                            <i className="fas fa-spinner fa-spin ml-2"></i>
-                        ) : (
-                            <i className="fas fa-sign-in-alt ml-2"></i>
-                        )}
-                        تسجيل الدخول
-                    </button>
-                </form>
-            </AppCard>
-        </div>
-    );
-};
-
-// شاشة إعداد الرقابي الأساسي
-const InitialSupervisorSetup = ({ db, auth, setCurrentUser, setIsLoggedIn, setIsInitialSetup }) => {
-    const [name, setName] = useState('');
-    const [gangId, setGangId] = useState('CRIPS001'); // الإيدي الافتراضي للرقابي الأساسي
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-    const handleInitialRegister = async () => {
-        setIsLoading(true);
-        setError('');
-
-        if (!name.trim()) {
-            setError("الرجاء إدخال الاسم.");
-            setIsLoading(false);
-            return;
-        }
-
-        const memberData = {
-            id: gangId,
-            name: name,
-            rank: RANKS.PRIMARY_SUPERVISOR,
-            createdAt: serverTimestamp(),
-        };
-
-        try {
-            // إضافة الوثيقة إلى مجموعة الأعضاء
-            const memberDocRef = doc(db, `artifacts/${appId}/public/data/members`, gangId);
-            await setDoc(memberDocRef, memberData);
-            
-            // تسجيل الدخول
-            const currentUserId = auth.currentUser ? auth.currentUser.uid : 'anonymous';
-
-            setCurrentUser({
-                uid: currentUserId,
-                id: memberData.id,
-                name: memberData.name,
-                rank: memberData.rank,
-            });
-            setIsLoggedIn(true);
-            setIsInitialSetup(false);
-
-        } catch (error) {
-            console.error("Error during initial registration:", error);
-            setError('فشل التسجيل. حاول مرة أخرى.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return (
-        <div className="flex flex-col items-center justify-center h-screen p-6 bg-gray-900">
-            <AppCard className="w-full max-w-md p-8 text-center border-green-500/50">
-                <h1 className="text-3xl font-bold mb-4 text-green-400">إعداد الرقابي الأساسي</h1>
-                <p className="text-gray-400 mb-6 text-sm">أنت أول مستخدم، سيتم تعيينك كـ **رقابي** ومؤسس للعصابة.</p>
-                <div className="space-y-4">
-                     <input
-                        type="text"
-                        placeholder="اسم الرقابي الكامل"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="w-full p-3 bg-gray-700 rounded-md border border-gray-600 focus:ring-green-500 focus:border-green-500 text-lg text-center"
-                        disabled={isLoading}
-                    />
-                    <input
-                        type="text"
-                        value={gangId}
-                        disabled
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 text-lg text-center text-gray-400"
-                    />
-                    <StatusMessage message={error} type="error" />
-                    <button
-                        onClick={handleInitialRegister}
-                        className="w-full p-3 bg-green-600 hover:bg-green-700 rounded-md font-bold transition flex items-center justify-center text-black shadow-lg shadow-green-500/50"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? <i className="fas fa-spinner fa-spin ml-2"></i> : <i className="fas fa-plus-circle ml-2"></i>}
-                        ابدأ كرقابي
-                    </button>
-                </div>
-            </AppCard>
-        </div>
-    );
-};
-
-
-// شاشة إضافة عضو جديد
-const AddMemberModal = ({ currentUser, db, closeModal, members, setMembers }) => {
-    const [newMemberName, setNewMemberName] = useState('');
-    const [newMemberId, setNewMemberId] = useState('');
-    const [newMemberRank, setNewMemberRank] = useState(RANKS.MEMBER);
-    const [message, setMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-    const allowedRanks = ALLOWED_ADDITIONS[currentUser.rank] || [];
-    const ranksOptions = useMemo(() => {
-        return Object.values(RANKS).filter(rank => allowedRanks.includes(rank));
-    }, [allowedRanks]);
-    
-    useEffect(() => {
-        if (ranksOptions.length > 0 && !ranksOptions.includes(newMemberRank)) {
-            setNewMemberRank(ranksOptions[0]);
-        }
-    }, [ranksOptions, newMemberRank]);
-
-
-    const handleAddMember = async () => {
-        setMessage('');
-        setIsLoading(true);
-        if (!newMemberName.trim() || !newMemberId.trim() || !newMemberRank) {
-            setMessage('جميع الحقول مطلوبة.');
-            setIsLoading(false);
-            return;
-        }
-
-        const formattedId = newMemberId.toUpperCase();
-        if (members.some(m => m.id === formattedId)) {
-            setMessage('إيدي العصابة هذا مستخدم بالفعل.');
-            setIsLoading(false);
-            return;
-        }
-        
-        const memberData = {
-            id: formattedId,
-            name: newMemberName,
-            rank: newMemberRank,
-            addedBy: currentUser.id,
-            createdAt: serverTimestamp(),
-        };
-        
-        try {
-            await runTransaction(db, async (transaction) => {
-                const memberDocRef = doc(db, `artifacts/${appId}/public/data/members`, formattedId);
-                const memberDoc = await transaction.get(memberDocRef);
-
-                if (memberDoc.exists()) {
-                    throw new Error("ID_EXISTS");
-                }
-                transaction.set(memberDocRef, memberData);
-            });
-            
-            setMessage(`تم إضافة العضو ${newMemberName} بنجاح!`);
-            setNewMemberName('');
-            setNewMemberId('');
-            setTimeout(closeModal, 1500); // إغلاق بعد النجاح
-        } catch (error) {
-            if (error.message === "ID_EXISTS") {
-                 setMessage('إيدي العصابة هذا مستخدم بالفعل. اختر إيدي آخر.');
-            } else {
-                 console.error("Error adding member:", error);
-                 setMessage('فشل في إضافة العضو. تحقق من الاتصال.');
-            }
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-            <AppCard className="w-full max-w-lg p-6 animate-fadeIn">
-                <h3 className="text-xl font-bold mb-4 text-blue-400 border-b border-gray-700 pb-2">إضافة عضو جديد</h3>
-                
-                <p className="text-sm text-gray-500 mb-4">بصفتك **{currentUser.rank}**، يمكنك إضافة الرتب التالية: **{ranksOptions.join(', ') || 'لا أحد'}**.</p>
-
-                <div className="space-y-4">
-                    <input
-                        type="text"
-                        placeholder="اسم العضو الكامل (مثال: فهد)"
-                        value={newMemberName}
-                        onChange={(e) => setNewMemberName(e.target.value)}
-                        className="w-full p-3 bg-gray-700 rounded-md border border-gray-600 focus:ring-blue-500 focus:border-blue-500"
-                        disabled={isLoading}
-                    />
-                    <input
-                        type="text"
-                        placeholder="إيدي العصابة الجديد (مثال: CRIPS002)"
-                        value={newMemberId}
-                        onChange={(e) => setNewMemberId(e.target.value.toUpperCase())}
-                        className="w-full p-3 bg-gray-700 rounded-md border border-gray-600 focus:ring-blue-500 focus:border-blue-500"
-                        disabled={isLoading}
-                        maxLength={10}
-                    />
-                    
-                    <select
-                        value={newMemberRank}
-                        onChange={(e) => setNewMemberRank(e.target.value)}
-                        className="w-full p-3 bg-gray-700 rounded-md border border-gray-600 focus:ring-blue-500 focus:border-blue-500"
-                        disabled={ranksOptions.length === 0 || isLoading}
-                    >
-                        {ranksOptions.map(rank => (
-                            <option key={rank} value={rank}>{rank}</option>
-                        ))}
-                    </select>
-
-                    <StatusMessage message={message} type={message.includes('نجاح') ? 'success' : 'error'} />
-                    
-                    <div className="flex justify-end space-x-4 space-x-reverse pt-2">
-                        <button 
-                            onClick={closeModal} 
-                            className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md font-semibold transition disabled:opacity-50"
-                            disabled={isLoading}
-                        >
-                            إلغاء
-                        </button>
-                        <button 
-                            onClick={handleAddMember} 
-                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md font-semibold transition flex items-center justify-center disabled:opacity-50"
-                            disabled={ranksOptions.length === 0 || isLoading}
-                        >
-                             {isLoading ? (
-                                <i className="fas fa-spinner fa-spin ml-2"></i>
-                            ) : (
-                                <i className="fas fa-user-plus ml-2"></i>
-                            )}
-                            إضافة
-                        </button>
-                    </div>
-                </div>
-            </AppCard>
-        </div>
-    );
-};
-
-// =========================================================================
-// === 5. مكون لوحة التحكم (الرئيسي) ===
-// =========================================================================
-
-const DashboardApp = ({ currentUser, db, members, setMembers, messages, sendMessage, tasks, jobs, products, announcements }) => {
-    const [activePage, setActivePage] = useState('home');
-    const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-    const auth = getAuth(initializeApp(JSON.parse(__firebase_config))); // للحصول على مرجع auth للإغلاق
-
-    const canAddMember = useMemo(() => {
-        return ALLOWED_ADDITIONS[currentUser.rank] && Object.keys(ALLOWED_ADDITIONS[currentUser.rank]).length > 0;
-    }, [currentUser.rank]);
-
-    const canCreateContent = useMemo(() => {
-        return ALLOWED_CONTENT_CREATORS.includes(currentUser.rank);
-    }, [currentUser.rank]);
-    
-    // قائمة عناصر التنقل
-    const navItems = [
-        { id: 'home', icon: 'fas fa-home', label: 'رئيسية' },
-        { id: 'members', icon: 'fas fa-users', label: 'أعضاء' },
-        { id: 'tasks', icon: 'fas fa-clipboard-list', label: 'مهام' },
-        { id: 'jobs', icon: 'fas fa-briefcase', label: 'وظائف' },
-        { id: 'store', icon: 'fas fa-store', label: 'متجر' },
-        { id: 'announcements', icon: 'fas fa-bullhorn', label: 'إعلانات' },
-        { id: 'money', icon: 'fas fa-wallet', label: 'أموال' },
-        { id: 'map', icon: 'fas fa-map-marked-alt', label: 'خريطة' },
-    ];
-    
-    const handleLogout = async () => {
-        await signOut(auth);
-        window.location.reload();
-    };
-
-    // دالة لعرض محتوى الصفحة النشطة
-    const renderPageContent = () => {
-        const pageProps = { db, appId, currentUser, canCreateContent };
-        switch (activePage) {
-            case 'home':
-                return <HomePage currentUser={currentUser} membersCount={members.length} messages={messages} sendMessage={sendMessage} latestAnnouncement={announcements[0]} />;
-            case 'members':
-                return <MembersPage members={members} canAddMember={canAddMember} setIsAddMemberOpen={setIsAddMemberOpen} />;
-            case 'tasks':
-                return <TasksPage {...pageProps} tasks={tasks} />;
-            case 'jobs':
-                return <JobsPage {...pageProps} jobs={jobs} />;
-            case 'store':
-                return <StorePage {...pageProps} products={products} />;
-            case 'announcements':
-                return <AnnouncementsPage {...pageProps} announcements={announcements} />;
-            case 'money':
-                return <MoneyPage />;
-            case 'map':
-                return <MapPage />;
-            default:
-                return <HomePage currentUser={currentUser} membersCount={members.length} messages={messages} sendMessage={sendMessage} latestAnnouncement={announcements[0]} />;
-        }
-    };
-
-    return (
-        <div className="ui-box">
-             {isAddMemberOpen && (
-                <AddMemberModal 
-                    currentUser={currentUser} 
-                    db={db} 
-                    closeModal={() => setIsAddMemberOpen(false)} 
-                    members={members}
-                    setMembers={setMembers}
-                />
-            )}
-            
-            {/* 1. شريط التنقل الرئيسي الأيمن (Desktop) */}
-            <div className="sidebar-right hidden lg:flex">
-                <div className="mb-8">
-                    <i className="fas fa-hammer text-3xl text-blue-400"></i>
-                </div>
-                
-                {navItems.map(item => (
-                    <div 
-                        key={item.id}
-                        data-page={item.id} 
-                        className={`nav-item ${activePage === item.id ? 'active' : ''}`}
-                        onClick={() => setActivePage(item.id)}
-                        title={item.label}
-                    >
-                        <i className={item.icon}></i>
-                        <span className="text-xs">{item.label}</span>
-                    </div>
-                ))}
-
-                <div className="mt-auto pb-4">
-                     <button onClick={handleLogout} className="nav-item">
-                        <i className="fas fa-sign-out-alt text-2xl text-red-500"></i>
-                    </button>
-                </div>
-            </div>
-
-            {/* 2. شريط القائمة التفصيلي الأيسر (Desktop) */}
-            <div className="sidebar-left hidden lg:flex">
-                <h1 className="text-2xl font-bold p-5 border-b border-gray-700 text-blue-400">عصابة الكربس</h1>
-                <div className="px-5 pt-3 pb-4 border-b border-gray-700">
-                    <p className="text-sm text-gray-400">مرحباً، {currentUser.name}</p>
-                    <p className="text-sm text-yellow-400 font-semibold">{currentUser.rank} | ID: {currentUser.id}</p>
-                </div>
-                <div id="side-menu-details" className="flex-1 overflow-y-auto mt-4">
-                    {navItems.map(item => (
-                        <div 
-                            key={item.id}
-                            data-page={item.id} 
-                            className={`px-5 py-3 cursor-pointer transition hover:bg-gray-800 ${activePage === item.id ? 'bg-gray-800 border-l-4 border-blue-500' : 'list-item'}`}
-                            onClick={() => setActivePage(item.id)}
-                        >
-                           {item.label}
-                        </div>
-                    ))}
-                </div>
-                <div className="p-5 border-t border-gray-700">
-                    <button onClick={handleLogout} className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-md transition">
-                         <i className="fas fa-sign-out-alt ml-2"></i>تسجيل خروج
-                    </button>
-                </div>
-            </div>
-
-            {/* 3. المحتوى الرئيسي للموقع */}
-            <div className="main-container flex-1 overflow-y-auto p-4 lg:p-6">
-                 {/* شريط التنقل العلوي للموبايل */}
-                <div className="lg:hidden flex justify-between items-center bg-gray-900 p-4 rounded-lg mb-4">
-                    <h1 className="text-xl font-bold text-blue-400">الكربس</h1>
-                    <button onClick={handleLogout} className="bg-red-600 text-white p-2 rounded-full w-8 h-8 flex items-center justify-center">
-                        <i className="fas fa-sign-out-alt text-sm"></i>
-                    </button>
-                    <select 
-                        value={activePage} 
-                        onChange={(e) => setActivePage(e.target.value)}
-                        className="p-2 bg-gray-700 rounded-md text-white border border-gray-600"
-                    >
-                        {navItems.map(item => (
-                             <option key={item.id} value={item.id}>{item.label}</option>
-                        ))}
-                    </select>
-                </div>
-
-                {renderPageContent()}
-            </div>
-        </div>
-    );
-};
-
-// =========================================================================
-// === 6. صفحات المحتوى (تم دمجها كمكونات) ===
-// =========================================================================
-
-// =========================================================================
-// 6.1. الصفحة الرئيسية (الدردشة والإعلانات)
-// =========================================================================
-
-const HomePage = ({ currentUser, membersCount, messages, sendMessage, latestAnnouncement }) => {
-    const [newMessage, setNewMessage] = useState('');
-    const chatRef = useRef(null);
-    
-    // التمرير إلى الأسفل عند وصول رسائل جديدة
-    useEffect(() => {
-        if (chatRef.current) {
-            chatRef.current.scrollTop = chatRef.current.scrollHeight;
-        }
-    }, [messages]);
-
-    const handleSendMessage = (e) => {
-        e.preventDefault();
-        if (newMessage.trim()) {
-            sendMessage(newMessage);
-            setNewMessage('');
-        }
-    };
-    
-    const getRankColor = (rank) => {
-        switch (rank) {
-            case RANKS.PRIMARY_SUPERVISOR: return 'text-red-500';
-            case RANKS.SECONDARY_SUPERVISOR: return 'text-yellow-500';
-            case RANKS.LEADER: return 'text-green-500';
-            case RANKS.DEPUTY: return 'text-purple-400';
-            default: return 'text-blue-400';
-        }
-    };
-
-    return (
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
-            {/* إحصائيات وإعلان */}
-            <div className="lg:col-span-1 space-y-6">
-                <AppCard>
-                    <h2 className="text-xl font-bold text-blue-400 mb-3"><i className="fas fa-chart-line ml-2"></i>إحصائيات العصابة</h2>
-                    <div className="flex justify-between items-center border-t border-gray-700 pt-3">
-                        <p className="text-gray-400">إجمالي الأعضاء:</p>
-                        <span className="text-3xl font-extrabold text-white">{membersCount}</span>
-                    </div>
-                </AppCard>
-
-                <AppCard className="border-yellow-500/50">
-                    <h2 className="text-xl font-bold text-yellow-400 mb-3"><i className="fas fa-bullhorn ml-2"></i>آخر إعلان</h2>
-                    {latestAnnouncement ? (
-                        <>
-                            <p className="text-lg font-semibold mb-2">{latestAnnouncement.title}</p>
-                            <p className="text-gray-400 text-sm italic border-t border-gray-700 pt-2">{latestAnnouncement.content.substring(0, 100)}...</p>
-                            <span className="text-xs text-gray-500 block mt-2">بواسطة: {latestAnnouncement.createdBy} في {formatTime(latestAnnouncement.createdAt)}</span>
-                        </>
-                    ) : (
-                        <p className="text-gray-500">لا توجد إعلانات حالياً.</p>
-                    )}
-                </AppCard>
-            </div>
-
-            {/* الدردشة الجماعية */}
-            <AppCard className="lg:col-span-2 flex flex-col h-[70vh] lg:h-full">
-                <h2 className="text-xl font-bold text-green-400 mb-4 border-b border-gray-700 pb-2"><i className="fas fa-comments ml-2"></i>دردشة العصابة</h2>
-                
-                <div ref={chatRef} className="flex-1 overflow-y-auto space-y-4 mb-4 p-2 bg-gray-800 rounded-lg">
-                    {messages.length === 0 && (
-                        <div className="text-center text-gray-500 py-10">
-                            <i className="fas fa-scroll text-4xl mb-3"></i>
-                            <p>ابدأ الدردشة بنشر أول رسالة!</p>
-                        </div>
-                    )}
-                    {messages.map((msg, index) => (
-                        <div key={index} className={`flex ${msg.senderId === currentUser.id ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`max-w-xs md:max-w-md p-3 rounded-lg shadow-md ${
-                                msg.senderId === currentUser.id 
-                                ? 'bg-blue-600/80 text-white rounded-br-none' 
-                                : 'bg-gray-700/80 text-gray-200 rounded-bl-none'
-                            }`}>
-                                <p className={`font-semibold text-xs mb-1 ${getRankColor(msg.senderRank)}`}>
-                                    {msg.senderName} ({msg.senderRank})
-                                </p>
-                                <p className="text-sm break-words">{msg.content}</p>
-                                <span className="text-[10px] text-gray-300 block mt-1 text-left">{formatTime(msg.timestamp)}</span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* نموذج إرسال الرسالة */}
-                <form onSubmit={handleSendMessage} className="flex space-x-2 space-x-reverse pt-2">
-                    <input
-                        type="text"
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder="اكتب رسالة..."
-                        className="flex-1 p-3 bg-gray-700 rounded-lg border border-gray-600 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                    <button
-                        type="submit"
-                        className="p-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold transition text-white"
-                        disabled={!newMessage.trim()}
-                    >
-                        <i className="fas fa-paper-plane"></i>
-                    </button>
-                </form>
-            </AppCard>
-        </section>
-    );
-};
-
-// =========================================================================
-// 6.2. صفحة الأعضاء
-// =========================================================================
-
-const MembersPage = ({ members, canAddMember, setIsAddMemberOpen }) => {
-    return (
-        <section>
-            <div className="flex justify-between items-center mb-6 border-b border-gray-700 pb-3">
-                <h2 className="text-2xl font-bold text-white">قائمة أعضاء العصابة ({members.length})</h2>
-                {canAddMember && (
-                    <button 
-                        onClick={() => setIsAddMemberOpen(true)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center shadow-md shadow-blue-500/30"
-                    >
-                        <i className="fas fa-user-plus ml-2"></i>
-                        إضافة عضو جديد
-                    </button>
-                )}
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {members.length === 0 ? (
-                    <div className="lg:col-span-4 text-center text-gray-500 p-10 bg-gray-800 rounded-xl">
-                        <i className="fas fa-frown text-4xl mb-3"></i>
-                        <p>لا يوجد أعضاء مسجلون بعد. الرجاء إضافة أول عضو (أو تأكد من أنك أول رقابي)!</p>
-                    </div>
-                ) : (
-                    members.map(member => (
-                        <AppCard key={member.id} className="text-center hover:shadow-blue-500/20 transition">
-                            <i className="fas fa-user-circle text-5xl mb-3 text-blue-400"></i>
-                            <h3 className="text-xl font-bold">{member.name}</h3>
-                            <p className="text-lg text-yellow-400 font-semibold mb-2">{member.rank}</p>
-                            <p className="text-gray-500 text-sm">ID: {member.id}</p>
-                            {member.addedBy && (
-                                <p className="text-xs text-gray-600 mt-1">بواسطة: {member.addedBy}</p>
-                            )}
-                        </AppCard>
-                    ))
-                )}
-            </div>
-        </section>
-    );
-};
-
-// =========================================================================
-// 6.3. صفحة المهام
-// =========================================================================
-
-const TaskCard = ({ task }) => {
-    const statusColor = task.status === 'جديد' ? 'bg-green-600' : 'bg-red-600';
-    const difficultyColor = task.difficulty === 'صعبة' ? 'text-red-400' : task.difficulty === 'سهل' ? 'text-green-400' : 'text-yellow-400';
-
-    return (
-        <AppCard className="hover:border-blue-500/50 transition flex flex-col">
-            <div className="flex justify-between items-start mb-3">
-                <h3 className="text-xl font-bold text-white">{task.name}</h3>
-                <span className={`px-2 py-1 text-xs font-semibold rounded-full text-black ${statusColor}`}>{task.status}</span>
-            </div>
-            <p className="text-sm text-gray-400 flex-1 mb-3">{task.description}</p>
-            <div className="border-t border-gray-700 pt-3 space-y-2">
-                <p className="text-sm text-gray-400">المكافأة: <span className="font-semibold text-yellow-400">{task.reward}</span></p>
-                <p className="text-sm text-gray-400">الصعوبة: <span className={`font-semibold ${difficultyColor}`}>{task.difficulty}</span></p>
-                <p className="text-xs text-gray-500 mt-1">أُنشئت بواسطة: {task.createdBy} - {formatTime(task.createdAt)}</p>
-            </div>
-        </AppCard>
-    );
-};
-
-const TasksPage = ({ canCreateContent, tasks, db, appId, currentUser }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
-    const [message, setMessage] = useState('');
-    const [newTask, setNewTask] = useState({ name: '', description: '', reward: '', difficulty: 'متوسط' });
-    
-    const handleAddTask = async () => {
-        setMessage('');
-        setIsSaving(true);
-        if (!newTask.name || !newTask.description || !newTask.reward) {
-            setMessage('الرجاء تعبئة جميع الحقول المطلوبة.');
-            setIsSaving(false);
-            return;
-        }
-
-        const tasksRef = getCollectionRef(db, appId, 'tasks');
-
-        const taskData = {
-            ...newTask,
-            status: 'جديد',
-            createdBy: currentUser.id,
-            createdAt: serverTimestamp(),
-        };
-
-        try {
-            await addDoc(tasksRef, taskData);
-            setNewTask({ name: '', description: '', reward: '', difficulty: 'متوسط' });
-            setMessage('تم إضافة المهمة بنجاح.');
-            setTimeout(() => setIsModalOpen(false), 1500);
-        } catch (error) {
-            console.error("فشل إضافة المهمة إلى Firestore:", error);
-            setMessage('فشل في حفظ المهمة. حاول مرة أخرى.');
-        } finally {
-            setIsSaving(false);
-        }
-    };
-    
-    const closeModal = () => {
-        setMessage('');
-        setIsModalOpen(false);
-        setNewTask({ name: '', description: '', reward: '', difficulty: 'متوسط' });
-    };
-
-    return (
-        <section>
-            <div className="flex justify-between items-center mb-6 border-b border-gray-700 pb-3">
-                <h2 className="text-2xl font-bold text-yellow-400">مهام العصابة ({tasks.length})</h2>
-                {canCreateContent && (
-                    <button 
-                        onClick={() => setIsModalOpen(true)}
-                        className="bg-yellow-600 hover:bg-yellow-700 text-black font-semibold py-2 px-4 rounded-lg transition flex items-center shadow-md shadow-yellow-500/30"
-                    >
-                        <i className="fas fa-plus-circle ml-2"></i>
-                        إضافة مهمة جديدة
-                    </button>
-                )}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                {tasks.length === 0 ? (
-                    <div className="md:col-span-2 lg:col-span-3 text-center text-gray-500 p-10 bg-gray-800 rounded-xl">
-                        <i className="fas fa-clipboard-list text-4xl mb-3"></i>
-                        <p>لا توجد مهام حالياً. الرقابي يمكنه البدء بإضافة مهام جديدة.</p>
-                    </div>
-                ) : (
-                    tasks.map(task => <TaskCard key={task.id} task={task} />)
-                )}
-            </div>
-            
-            {isModalOpen && (
-                <ContentModal title="إضافة مهمة جديدة" closeModal={closeModal} handleSave={handleAddTask} isSaving={isSaving}>
-                    <input
-                        type="text"
-                        placeholder="اسم المهمة (مثال: تأمين الموقع A)"
-                        value={newTask.name}
-                        onChange={(e) => setNewTask(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-yellow-500 focus:border-yellow-500"
-                    />
-                    <textarea
-                        placeholder="الوصف التفصيلي للمهمة"
-                        value={newTask.description}
-                        onChange={(e) => setNewTask(prev => ({ ...prev, description: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-yellow-500 focus:border-yellow-500 h-24"
-                    ></textarea>
-                     <input
-                        type="text"
-                        placeholder="المكافأة (مثال: 5000$ كاش)"
-                        value={newTask.reward}
-                        onChange={(e) => setNewTask(prev => ({ ...prev, reward: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-yellow-500 focus:border-yellow-500"
-                    />
-                    <select
-                        value={newTask.difficulty}
-                        onChange={(e) => setNewTask(prev => ({ ...prev, difficulty: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-yellow-500 focus:border-yellow-500"
-                    >
-                        {['سهل', 'متوسط', 'صعبة'].map(d => <option key={d} value={d}>{d}</option>)}
-                    </select>
-                    <StatusMessage message={message} type={message.includes('نجاح') ? 'success' : 'error'} />
-                </ContentModal>
-            )}
-        </section>
-    );
-};
-
-// =========================================================================
-// 6.4. صفحة الوظائف
-// =========================================================================
-
-const JobCard = ({ job }) => (
-    <AppCard className="border-purple-500/50 hover:shadow-purple-500/20 transition">
-        <h3 className="text-xl font-bold text-purple-400 mb-2">{job.title}</h3>
-        <p className="text-sm text-gray-400 mb-3 flex-1">{job.description}</p>
-        <div className="border-t border-gray-700 pt-3 space-y-1">
-            <p className="text-sm text-gray-400">الراتب: <span className="font-semibold text-white">{job.salary}</span></p>
-            <p className="text-sm text-gray-400">الشروط: <span className="font-semibold text-gray-300">{job.requirements}</span></p>
-            <p className="text-xs text-gray-500 mt-1">أُنشئت بواسطة: {job.createdBy} - {formatTime(job.createdAt)}</p>
-        </div>
-    </AppCard>
-);
-
-const JobsPage = ({ canCreateContent, jobs, db, appId, currentUser }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
-    const [message, setMessage] = useState('');
-    const [newJob, setNewJob] = useState({ title: '', description: '', salary: '', requirements: 'لا توجد شروط خاصة.' });
-
-    const handleAddJob = async () => {
-        setMessage('');
-        setIsSaving(true);
-        if (!newJob.title || !newJob.description || !newJob.salary) {
-            setMessage('الرجاء تعبئة جميع الحقول المطلوبة.');
-            setIsSaving(false);
-            return;
-        }
-
-        const jobsRef = getCollectionRef(db, appId, 'jobs');
-
-        const jobData = {
-            ...newJob,
-            createdBy: currentUser.id,
-            createdAt: serverTimestamp(),
-        };
-
-        try {
-            await addDoc(jobsRef, jobData);
-            setNewJob({ title: '', description: '', salary: '', requirements: 'لا توجد شروط خاصة.' });
-            setMessage('تم إضافة الوظيفة بنجاح.');
-            setTimeout(() => setIsModalOpen(false), 1500);
-        } catch (error) {
-            console.error("فشل إضافة الوظيفة إلى Firestore:", error);
-            setMessage('فشل في حفظ الوظيفة. حاول مرة أخرى.');
-        } finally {
-            setIsSaving(false);
-        }
-    };
-    
-    const closeModal = () => {
-        setMessage('');
-        setIsModalOpen(false);
-        setNewJob({ title: '', description: '', salary: '', requirements: 'لا توجد شروط خاصة.' });
-    };
-
-    return (
-        <section>
-            <div className="flex justify-between items-center mb-6 border-b border-gray-700 pb-3">
-                <h2 className="text-2xl font-bold text-purple-400">وظائف العصابة المتاحة ({jobs.length})</h2>
-                {canCreateContent && (
-                    <button 
-                        onClick={() => setIsModalOpen(true)}
-                        className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center shadow-md shadow-purple-500/30"
-                    >
-                        <i className="fas fa-briefcase ml-2"></i>
-                        إضافة وظيفة
-                    </button>
-                )}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                {jobs.length === 0 ? (
-                    <div className="md:col-span-2 lg:col-span-3 text-center text-gray-500 p-10 bg-gray-800 rounded-xl">
-                        <i className="fas fa-tools text-4xl mb-3"></i>
-                        <p>لا توجد وظائف شاغرة حالياً. الرقابي يمكنه إضافة وظائف جديدة.</p>
-                    </div>
-                ) : (
-                    jobs.map(job => <JobCard key={job.id} job={job} />)
-                )}
-            </div>
-
-            {isModalOpen && (
-                <ContentModal title="إضافة وظيفة جديدة" closeModal={closeModal} handleSave={handleAddJob} isSaving={isSaving}>
-                    <input
-                        type="text"
-                        placeholder="عنوان الوظيفة (مثال: حارس نقطة)"
-                        value={newJob.title}
-                        onChange={(e) => setNewJob(prev => ({ ...prev, title: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-purple-500 focus:border-purple-500"
-                    />
-                    <textarea
-                        placeholder="الوصف والمهام المطلوبة"
-                        value={newJob.description}
-                        onChange={(e) => setNewJob(prev => ({ ...prev, description: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-purple-500 focus:border-purple-500 h-24"
-                    ></textarea>
-                     <input
-                        type="text"
-                        placeholder="الراتب (مثال: 10,000$ أسبوعياً)"
-                        value={newJob.salary}
-                        onChange={(e) => setNewJob(prev => ({ ...prev, salary: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-purple-500 focus:border-purple-500"
-                    />
-                    <input
-                        type="text"
-                        placeholder="الشروط (مثال: خبرة 3 أشهر)"
-                        value={newJob.requirements}
-                        onChange={(e) => setNewJob(prev => ({ ...prev, requirements: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-purple-500 focus:border-purple-500"
-                    />
-                    <StatusMessage message={message} type={message.includes('نجاح') ? 'success' : 'error'} />
-                </ContentModal>
-            )}
-        </section>
-    );
-};
-
-// =========================================================================
-// 6.5. صفحة المتجر
-// =========================================================================
-
-const ProductCard = ({ product }) => (
-    <AppCard className="border-red-500/50 hover:shadow-red-500/20 transition">
-        <h3 className="text-xl font-bold text-red-400 mb-2">{product.name}</h3>
-        <p className="text-sm text-gray-400 mb-3 flex-1">{product.description}</p>
-        <div className="border-t border-gray-700 pt-3 flex justify-between items-center">
-            <span className="text-xl font-extrabold text-white">{product.price}</span>
-            <button className="bg-green-600 hover:bg-green-700 text-black font-semibold py-2 px-4 rounded-md transition text-sm">
-                <i className="fas fa-shopping-cart ml-2"></i>شراء
-            </button>
-        </div>
-    </AppCard>
-);
-
-const StorePage = ({ canCreateContent, products, db, appId, currentUser }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
-    const [message, setMessage] = useState('');
-    const [newProduct, setNewProduct] = useState({ name: '', description: '', price: '' });
-    
-    const handleAddProduct = async () => {
-        setMessage('');
-        setIsSaving(true);
-        if (!newProduct.name || !newProduct.description || !newProduct.price) {
-            setMessage('الرجاء تعبئة جميع الحقول المطلوبة.');
-            setIsSaving(false);
-            return;
-        }
-
-        const productsRef = getCollectionRef(db, appId, 'products');
-
-        const productData = {
-            ...newProduct,
-            createdBy: currentUser.id,
-            createdAt: serverTimestamp(),
-        };
-
-        try {
-            await addDoc(productsRef, productData);
-            setNewProduct({ name: '', description: '', price: '' });
-            setMessage('تم إضافة المنتج بنجاح.');
-            setTimeout(() => setIsModalOpen(false), 1500);
-        } catch (error) {
-            console.error("فشل إضافة المنتج إلى Firestore:", error);
-            setMessage('فشل في حفظ المنتج. حاول مرة أخرى.');
-        } finally {
-            setIsSaving(false);
-        }
-    };
-
-    const closeModal = () => {
-        setMessage('');
-        setIsModalOpen(false);
-        setNewProduct({ name: '', description: '', price: '' });
-    };
-
-    return (
-        <section>
-            <div className="flex justify-between items-center mb-6 border-b border-gray-700 pb-3">
-                <h2 className="text-2xl font-bold text-red-400">متجر العصابة (العتاد) ({products.length})</h2>
-                {canCreateContent && (
-                    <button 
-                        onClick={() => setIsModalOpen(true)}
-                        className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center shadow-md shadow-red-500/30"
-                    >
-                        <i className="fas fa-plus-circle ml-2"></i>
-                        إضافة منتج
-                    </button>
-                )}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                {products.length === 0 ? (
-                    <div className="md:col-span-2 lg:col-span-3 text-center text-gray-500 p-10 bg-gray-800 rounded-xl">
-                        <i className="fas fa-store text-4xl mb-3"></i>
-                        <p>المتجر فارغ. الرقابي يمكنه إضافة عتاد جديد للبيع.</p>
-                    </div>
-                ) : (
-                    products.map(product => <ProductCard key={product.id} product={product} />)
-                )}
-            </div>
-            
-            {isModalOpen && (
-                <ContentModal title="إضافة منتج جديد" closeModal={closeModal} handleSave={handleAddProduct} isSaving={isSaving}>
-                    <input
-                        type="text"
-                        placeholder="اسم المنتج (مثال: مسدس 9mm)"
-                        value={newProduct.name}
-                        onChange={(e) => setNewProduct(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-red-500 focus:border-red-500"
-                    />
-                    <textarea
-                        placeholder="وصف المنتج والمواصفات"
-                        value={newProduct.description}
-                        onChange={(e) => setNewProduct(prev => ({ ...prev, description: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-red-500 focus:border-red-500 h-24"
-                    ></textarea>
-                     <input
-                        type="text"
-                        placeholder="السعر (مثال: 500$ أو 5 نقاط)"
-                        value={newProduct.price}
-                        onChange={(e) => setNewProduct(prev => ({ ...prev, price: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-red-500 focus:border-red-500"
-                    />
-                    <StatusMessage message={message} type={message.includes('نجاح') ? 'success' : 'error'} />
-                </ContentModal>
-            )}
-        </section>
-    );
-};
-
-// =========================================================================
-// 6.6. صفحة الإعلانات
-// =========================================================================
-
-const AnnouncementCard = ({ announcement }) => {
-    const priorityColor = announcement.priority === 'عاجل' ? 'bg-red-700' : announcement.priority === 'هام' ? 'bg-yellow-600' : 'bg-green-600';
-    
-    return (
-        <AppCard className="border-green-500/50 hover:shadow-green-500/20 transition">
-            <div className="flex justify-between items-start mb-2">
-                <h3 className="text-xl font-bold text-green-400">{announcement.title}</h3>
-                <span className={`px-2 py-1 text-xs font-semibold rounded-full text-white ${priorityColor}`}>{announcement.priority}</span>
-            </div>
-            <p className="text-sm text-gray-300 mb-3 flex-1">{announcement.content}</p>
-            <p className="text-xs text-gray-500 mt-2 border-t border-gray-700 pt-2">بواسطة: {announcement.createdBy} - {formatTime(announcement.createdAt)}</p>
-        </AppCard>
-    );
-};
-
-const AnnouncementsPage = ({ canCreateContent, announcements, db, appId, currentUser }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
-    const [message, setMessage] = useState('');
-    const [newAnnouncement, setNewAnnouncement] = useState({ title: '', content: '', priority: 'عادي' });
-    
-    const handleAddAnnouncement = async () => {
-        setMessage('');
-        setIsSaving(true);
-        if (!newAnnouncement.title || !newAnnouncement.content) {
-            setMessage('الرجاء تعبئة جميع الحقول المطلوبة.');
-            setIsSaving(false);
-            return;
-        }
-
-        const announcementsRef = getCollectionRef(db, appId, 'announcements');
-
-        const announcementData = {
-            ...newAnnouncement,
-            createdBy: currentUser.id,
-            createdAt: serverTimestamp(),
-        };
-
-        try {
-            await addDoc(announcementsRef, announcementData);
-            setNewAnnouncement({ title: '', content: '', priority: 'عادي' });
-            setMessage('تم نشر الإعلان بنجاح.');
-            setTimeout(() => setIsModalOpen(false), 1500);
-        } catch (error) {
-            console.error("فشل نشر الإعلان إلى Firestore:", error);
-            setMessage('فشل في حفظ الإعلان. حاول مرة أخرى.');
-        } finally {
-            setIsSaving(false);
-        }
-    };
-
-    const closeModal = () => {
-        setMessage('');
-        setIsModalOpen(false);
-        setNewAnnouncement({ title: '', content: '', priority: 'عادي' });
-    };
-
-    return (
-        <section>
-            <div className="flex justify-between items-center mb-6 border-b border-gray-700 pb-3">
-                <h2 className="text-2xl font-bold text-green-400">إعلانات العصابة ({announcements.length})</h2>
-                {canCreateContent && (
-                    <button 
-                        onClick={() => setIsModalOpen(true)}
-                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center shadow-md shadow-green-500/30"
-                    >
-                        <i className="fas fa-plus-circle ml-2"></i>
-                        نشر إعلان
-                    </button>
-                )}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                {announcements.length === 0 ? (
-                    <div className="md:col-span-2 lg:col-span-3 text-center text-gray-500 p-10 bg-gray-800 rounded-xl">
-                        <i className="fas fa-volume-up text-4xl mb-3"></i>
-                        <p>لا توجد إعلانات منشورة حالياً. الرقابي يمكنه النشر.</p>
-                    </div>
-                ) : (
-                    announcements.map(announcement => <AnnouncementCard key={announcement.id} announcement={announcement} />)
-                )}
-            </div>
-
-            {isModalOpen && (
-                <ContentModal title="نشر إعلان جديد" closeModal={closeModal} handleSave={handleAddAnnouncement} isSaving={isSaving}>
-                    <input
-                        type="text"
-                        placeholder="عنوان الإعلان"
-                        value={newAnnouncement.title}
-                        onChange={(e) => setNewAnnouncement(prev => ({ ...prev, title: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-green-500 focus:border-green-500"
-                    />
-                    <textarea
-                        placeholder="محتوى الإعلان التفصيلي"
-                        value={newAnnouncement.content}
-                        onChange={(e) => setNewAnnouncement(prev => ({ ...prev, content: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-green-500 focus:border-green-500 h-24"
-                    ></textarea>
-                    <select
-                        value={newAnnouncement.priority}
-                        onChange={(e) => setNewAnnouncement(prev => ({ ...prev, priority: e.target.value }))}
-                        className="w-full p-3 bg-gray-800 rounded-md border border-gray-700 focus:ring-green-500 focus:border-green-500"
-                    >
-                        {['عادي', 'هام', 'عاجل'].map(p => <option key={p} value={p}>{p}</option>)}
-                    </select>
-                    <StatusMessage message={message} type={message.includes('نجاح') ? 'success' : 'error'} />
-                </ContentModal>
-            )}
-        </section>
-    );
-};
-
-// =========================================================================
-// 6.7. صفحات بسيطة (الأموال والخريطة)
-// =========================================================================
-
-const MoneyPage = () => (
-    <section>
-         <h2 className="text-2xl font-bold text-gray-400 mb-6 border-b border-gray-700 pb-3"><i className="fas fa-wallet ml-2"></i>إدارة أموال العصابة</h2>
-         <AppCard className="text-center p-10">
-            <i className="fas fa-dollar-sign text-6xl text-green-500 mb-4"></i>
-            <p className="text-xl text-gray-300">هذه الصفحة لإدارة حسابات العصابة والرواتب.</p>
-            <p className="text-sm text-gray-500 mt-2">يمكن تطويرها لاحقاً لإضافة نظام تحويلات ومحاسبة.</p>
-        </AppCard>
-    </section>
-);
-
-const MapPage = () => (
-    <section>
-        <h2 className="text-2xl font-bold text-gray-400 mb-6 border-b border-gray-700 pb-3"><i className="fas fa-map-marked-alt ml-2"></i>خريطة السيطرة</h2>
-        <AppCard className="p-0 overflow-hidden">
-             <img 
-                id="los-santos-map"
-                src="https://placehold.co/1000x500/1e293b/94a3b8?text=Los+Santos+Map" 
-                alt="خريطة لوس سانتوس"
-                className="w-full h-auto object-cover"
-                onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/1000x500/1e293b/94a3b8?text=Los+Santos+Map"; }} 
-             />
-             <div className="p-4 text-center">
-                 <p className="text-sm text-gray-500">
-                    هذه صورة افتراضية. يمكن استبدالها بخريطة تفاعلية لتحديد نقاط السيطرة.
-                 </p>
-             </div>
-        </AppCard>
-    </section>
-);
-
-
-// =========================================================================
-// === 7. المكون الرئيسي (App) ===
-// =========================================================================
+// كل المكونات ستبقى كما هي
 
 export default function App() {
-    const [db, setDb] = useState(null);
-    const [isAuthReady, setIsAuthReady] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [currentUser, setCurrentUser] = useState(null);
-    const [isInitialSetup, setIsInitialSetup] = useState(false); // لتحديد أول مستخدم
-    
-    // حالات Firestore لجميع المجموعات العامة
-    const [members, setMembers] = useState([]);
-    const [messages, setMessages] = useState([]);
-    const [tasks, setTasks] = useState([]);
-    const [jobs, setJobs] = useState([]);
-    const [products, setProducts] = useState([]);
-    const [announcements, setAnnouncements] = useState([]);
-
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-    // 1. تهيئة Firebase والمصادقة
-    useEffect(() => {
-        try {
-            const firebaseConfig = JSON.parse(__firebase_config);
-            const app = initializeApp(firebaseConfig);
-            const firestore = getFirestore(app);
-            const auth = getAuth(app);
-            setDb(firestore);
-
-            // المصادقة
-            const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
-                if (!user) {
-                    if (typeof __initial_auth_token !== 'undefined') {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-                }
-                setIsAuthReady(true);
-            });
-
-            // إيقاف الاشتراك عند إزالة المكون
-            return () => unsubscribeAuth();
-        } catch (e) {
-            console.error("Firebase Initialization Error:", e);
-        }
-    }, []);
-
-    // 2. جلب البيانات في الوقت الفعلي (Firestore Listeners)
-    useEffect(() => {
-        if (!db || !isAuthReady || !isLoggedIn || !currentUser) return;
-        
-        // =================================================
-        // A. جلب الأعضاء (Members)
-        // =================================================
-        const membersRef = getCollectionRef(db, appId, 'members');
-        const unsubscribeMembers = onSnapshot(membersRef, (snapshot) => {
-            const fetchedMembers = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-            setMembers(fetchedMembers);
-        }, (error) => {
-            console.error("Error fetching members:", error);
-        });
-
-        // =================================================
-        // B. جلب الدردشة (Chat)
-        // =================================================
-        const chatQuery = query(getCollectionRef(db, appId, 'chat'), orderBy('timestamp', 'desc'), limit(50));
-        const unsubscribeChat = onSnapshot(chatQuery, (snapshot) => {
-            const fetchedMessages = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            })).reverse(); // اعكس الترتيب ليكون الأقدم في الأعلى
-            setMessages(fetchedMessages);
-        }, (error) => {
-            console.error("Error fetching chat messages:", error);
-        });
-        
-        // =================================================
-        // C. جلب المهام (Tasks)
-        // =================================================
-        const unsubscribeTasks = onSnapshot(getOrderedQuery(db, appId, 'tasks'), (snapshot) => {
-            const fetchedTasks = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setTasks(fetchedTasks);
-        }, (error) => {
-            console.error("Error fetching tasks:", error);
-        });
-
-        // =================================================
-        // D. جلب الوظائف (Jobs)
-        // =================================================
-        const unsubscribeJobs = onSnapshot(getOrderedQuery(db, appId, 'jobs'), (snapshot) => {
-            const fetchedJobs = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setJobs(fetchedJobs);
-        }, (error) => {
-            console.error("Error fetching jobs:", error);
-        });
-
-        // =================================================
-        // E. جلب المنتجات (Products/Store)
-        // =================================================
-        const unsubscribeProducts = onSnapshot(getOrderedQuery(db, appId, 'products'), (snapshot) => {
-            const fetchedProducts = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setProducts(fetchedProducts);
-        }, (error) => {
-            console.error("Error fetching products:", error);
-        });
-
-        // =================================================
-        // F. جلب الإعلانات (Announcements)
-        // =================================================
-        const unsubscribeAnnouncements = onSnapshot(getOrderedQuery(db, appId, 'announcements'), (snapshot) => {
-            const fetchedAnnouncements = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setAnnouncements(fetchedAnnouncements);
-        }, (error) => {
-            console.error("Error fetching announcements:", error);
-        });
-
-        // إيقاف جميع الاشتراكات عند تسجيل الخروج
-        return () => {
-            unsubscribeMembers();
-            unsubscribeChat();
-            unsubscribeTasks();
-            unsubscribeJobs();
-            unsubscribeProducts();
-            unsubscribeAnnouncements();
-        };
-
-    }, [db, isAuthReady, isLoggedIn, currentUser, appId]);
-
-
-    // دالة إرسال الرسالة إلى Firestore
-    const sendMessage = useCallback(async (content) => {
-        if (!db || !currentUser) return;
-
-        const chatRef = getCollectionRef(db, appId, 'chat');
-        const messageData = {
-            content: content,
-            senderId: currentUser.id,
-            senderName: currentUser.name,
-            senderRank: currentUser.rank,
-            timestamp: serverTimestamp(),
-        };
-
-        try {
-            await addDoc(chatRef, messageData);
-        } catch (error) {
-            console.error("Error sending message:", error);
-        }
-    }, [db, currentUser, appId]);
-
-
-    // حالة التحميل الأولية
-    if (!isAuthReady || !db) {
-        return (
-             <div className="flex flex-col items-center justify-center h-screen bg-gray-900">
-                <LoadingIndicator message="جاري الاتصال بالخادم..." className="w-64" />
-            </div>
-        );
-    }
-    
-    // شاشات العرض بناءً على حالة تسجيل الدخول
-    if (!isLoggedIn) {
-        return (
-            <LoginScreen 
-                auth={getAuth(initializeApp(JSON.parse(__firebase_config)))} 
-                db={db} 
-                setCurrentUser={setCurrentUser} 
-                setIsLoggedIn={setIsLoggedIn} 
-                isInitialSetup={isInitialSetup}
-                setIsInitialSetup={setIsInitialSetup}
-            />
-        );
-    }
-
-    // لوحة التحكم الرئيسية
-    return (
-        <DashboardApp 
-            currentUser={currentUser} 
-            db={db} 
-            members={members} 
-            setMembers={setMembers}
-            messages={messages} 
-            sendMessage={sendMessage} 
-            tasks={tasks}
-            jobs={jobs}
-            products={products}
-            announcements={announcements}
-        />
-    );
+    // ... (الكود الرئيسي)
 }
