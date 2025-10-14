@@ -15,35 +15,36 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
     
     <!-- React -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <!-- التطبيق -->
+    <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-900 text-white">
     <div id="root"></div>
     
-    <!-- التكوين -->
     <script>
-        // Firebase Configuration
-        const __firebase_config = JSON.stringify({
-            apiKey: "your-api-key",
-            authDomain: "your-project.firebaseapp.com",
-            projectId: "your-project-id",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "your-app-id"
-        });
+        // إعدادات Firebase الحقيقية الخاصة بك
+        const __firebase_config = {
+            apiKey: "AIzaSyDiwe88VtFmkIq91Nh4zTwsU1OMcUVOqtU",
+            authDomain: "trax-shop.firebaseapp.com",
+            projectId: "trax-shop",
+            storageBucket: "trax-shop.firebasestorage.app",
+            messagingSenderId: "838411558560",
+            appId: "1:838411558560:web:3a09bb62279a42b223f3c5",
+            measurementId: "G-KHF537ZXP3"
+        };
         
         const __app_id = "crips-gang-app";
-        const __initial_auth_token = null; // أو توكن المصادقة المخصص إذا كان متوفراً
+        const __initial_auth_token = null;
     </script>
-    
-    <!-- المكونات -->
+
+    <!-- التطبيق React -->
     <script type="text/babel" src="app.js"></script>
 </body>
 </html>
