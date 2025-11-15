@@ -28,17 +28,19 @@ body {
     overflow-x: hidden;
 }
 
-/* الخلفية المدمجة (يجب أن يتم استبدالها بصورة مناسبة لاحقًا) */
+/* تم حل مشكلة الخلفية: يتم استخدام صورة خارجية (background-cover.jpg) */
 .bg-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* خلفية داكنة مع تدرج أحمر خفيف */
+    /* صورة خلفية السيرفر الحقيقية */
     background: 
-        linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(20, 0, 0, 0.9) 100%),
-        url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQcJCQwLDwkNDy0QHRo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo/wAARCAAoACgDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAUGBAf/xAAjEAACAgIBBAIDAQAAAAAAAAABAgMRBAAFBhIhIjFBcRRR/8QAFwEAAwEAAAAAAAAAAAAAAAAAAwQFAv/EACIRAAICAgICAwADAAAAAAAAAAECABEDBCExBRJRYSJxgf/aAAwDAQACEQMRAD8A93bW9m7R2R879R3m6l8t2JmFvG69g28cM0/wB92+4Dkc2/Bw2yJ9fN+T1D71JvL0+0+S33001vM0X3P1t1KxR/e9jX8QW9QYp0eN1jHw5n8P3rYy3076G+zP3/eP8A7YyV43xNfC/U3+N49vj8D/APa/4pG1+9vUv+F6L/Tf+2MljLdG76I9/f5/9d/2zJRj9B6HnK9X6/d9H9e3Xm8q0d+aO9c8lF/D3xQ/d3f7M093k8VzY+O3mJ6F/g+5d+9h1hH4t33v8AZmkvvB5T/jOj/wD0r/tgyXv3g8t/xPRf/AKV/wBqDIQ+9Hn/APF9H/8A03/bBlC/eLz//ABfR/wD6b/tgyGz0n1O/6h6j/wBv6j/T/wC2DIf/Z');
+        /* طبقة تدرج لوني داكنة لضمان التباين */
+        linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(20, 0, 0, 0.95) 100%),
+        /* مسار الصورة - تأكد من وجود background-cover.jpg في نفس المجلد */
+        url('background-cover.jpg'); 
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -57,17 +59,11 @@ header {
     margin-bottom: 20px;
 }
 
-.logo-title {
-    font-size: 3.5rem;
-    font-weight: 900;
-    color: var(--logo-cream); 
-    text-shadow: 0 0 15px rgba(224, 53, 48, 0.5);
-    margin-bottom: 5px;
-    letter-spacing: 2px;
-}
-
-.logo-title span {
-    color: var(--primary-red);
+/* تنسيق الشعار الأصلي كصورة */
+.main-logo {
+    width: 150px; /* حجم مناسب للشعار */
+    height: auto;
+    margin-bottom: 10px;
 }
 
 .logo-text {
@@ -340,7 +336,7 @@ footer {
 
 /* استجابة للجوال */
 @media (max-width: 768px) {
-    .logo-title { font-size: 2.5rem; }
+    .main-logo { width: 100px; }
     .logo-text { font-size: 1.2rem; }
     .law-header h3 { font-size: 1rem; }
     .btn-contact { display: block; margin: 10px auto; }
