@@ -3,48 +3,806 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عصابة الكربس - نظام الإدارة</title>
+    <title>دستور وقوانين ولاية سان أندرياس | MysteryRP</title>
     
-    <!-- Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
-    
-    <!-- React -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body class="bg-gray-900 text-white">
-    <div id="root"></div>
-    
-    <script>
-        // إعدادات Firebase الحقيقية الخاصة بك
-        const __firebase_config = {
-            apiKey: "AIzaSyDiwe88VtFmkIq91Nh4zTwsU1OMcUVOqtU",
-            authDomain: "trax-shop.firebaseapp.com",
-            projectId: "trax-shop",
-            storageBucket: "trax-shop.firebasestorage.app",
-            messagingSenderId: "838411558560",
-            appId: "1:838411558560:web:3a09bb62279a42b223f3c5",
-            measurementId: "G-KHF537ZXP3"
-        };
-        
-        const __app_id = "crips-gang-app";
-        const __initial_auth_token = null;
-    </script>
+    <style>
+        /* ---------------------------------------------------- */
+        /* 1. كود التصميم (CSS) - تم تحسين الألوان وتنسيقات المواد */
+        /* ---------------------------------------------------- */
+        :root {
+            --primary-red: #D7263D;    /* أحمر ناري قوي */
+            --logo-cream: #EAE6DF;     /* اللون الفاتح للشعار */
+            --bg-black: #050505;       /* أسود حالك */
+            --card-bg: #141414;        /* رمادي داكن جداً للبطاقات */
+            --text-white: #ffffff;
+            --text-gray: #B0B0B0;      /* رمادي فاتح للنصوص */
+            --dark-border: #2A2A2A;    /* حدود داكنة */
+            --section-title-bg: #1B0B0B; /* خلفية عنوان الباب */
+        }
 
-    <!-- التطبيق React -->
-    <script type="text/babel" src="‏script.js"></script>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* خلفية داكنة مع تدرج أحمر خفيف */
+            background: 
+                linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(20, 0, 0, 0.9) 100%),
+                url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQcJCQwLDwkNDy0QHRo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo/wAARCAAoACgDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAUGBAf/xAAjEAACAgIBBAIDAQAAAAAAAAABAgMRBAAFBhIhIjFBcRRR/8QAFwEAAwEAAAAAAAAAAAAAAAAAAwQFAv/EACIRAAICAgICAwADAAAAAAAAAAECABEDBCExBRJRYSJxgf/aAAwDAQACEQMRAD8A9G3W9m7R2R879R3m6l8t2JmFvG69g28cM0/wB92+4Dkc2/Bw2yJ9fN+T1D71JvL0+0+S33001vM0X3P1t1KxR/e9jX8QW9QYp0eN1jHw5n8P3rYy3076G+zP3/eP8A7YyV43xNfC/U3+N49vj8D/APa/4pG1+9vUv+F6L/Tf+2MljLdG76I9/f5/9d/2zJRj9B6HnK9X6/d9H9e3Xm8q0d+aO9c8lF/D3xQ/d3f7M093k8VzY+O3mJ6F/g+5d+9h1hH4t33v8AZmkvvB5T/jOj/wD0r/tgyXv3g8t/xPRf/AKV/wBqDIQ+9Hn/APF9H/8A03/bBlC/eLz//ABfR/wD6b/tgyGz0n1O/6h6j/wBv6j/T/wC2DIf/Z');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: -1;
+        }
+
+        /* --- الهيدر --- */
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, var(--bg-black) 100%);
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+        }
+        
+        .logo-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--logo-cream); 
+            text-shadow: 0 0 15px rgba(224, 53, 48, 0.5);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .logo-title span {
+            color: var(--primary-red);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--logo-cream); 
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            margin-bottom: 5px;
+        }
+
+        .logo-sub {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        /* --- صندوق البحث --- */
+        .search-wrapper {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 18px 50px 18px 20px;
+            border-radius: 50px;
+            background: #1B1B1B;
+            border: 2px solid var(--dark-border);
+            color: var(--text-white);
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1.1rem;
+            transition: 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 20px rgba(215, 38, 61, 0.7);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-red);
+        }
+
+        /* --- الحاويات والبطاقات --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .law-card {
+            background: var(--card-bg);
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-right: 4px solid transparent;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+        }
+
+        .law-card:hover {
+            border-right-color: var(--primary-red);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(215, 38, 61, 0.2);
+        }
+
+        .law-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .law-header h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .law-header h3 i {
+            margin-left: 10px;
+            color: var(--primary-red);
+            width: 25px;
+        }
+
+        .arrow {
+            transition: transform 0.3s ease;
+            color: var(--text-gray);
+        }
+
+        .law-card.active .law-header {
+            background: rgba(215, 38, 61, 0.3);
+            color: var(--text-white);
+        }
+
+        .law-card.active .arrow {
+            transform: rotate(180deg);
+            color: var(--text-white);
+        }
+
+        .law-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background: #0D0D0D;
+        }
+
+        .law-body ul, .law-body ol {
+            list-style: none;
+            padding: 20px 30px;
+        }
+
+        .law-body li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-gray);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .law-body li:last-child {
+            border-bottom: none;
+        }
+
+        /* تنسيق خاص للمواد والأبواب في الدستور */
+        .law-body .chapter-title {
+            color: var(--primary-red);
+            font-size: 1.4rem;
+            padding: 20px 0 10px;
+            text-align: center;
+            font-weight: 700;
+            border-bottom: 2px solid var(--primary-red);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .law-body .article {
+            color: var(--logo-cream);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 15px;
+            padding-right: 10px;
+        }
+        
+        .law-body .article-section {
+            padding-right: 25px;
+            margin-top: 10px;
+            font-size: 1rem;
+            color: var(--text-gray);
+        }
+
+        .law-body .article-list {
+            padding-right: 40px;
+            margin-bottom: 10px;
+        }
+
+        .law-body .article-list li {
+            font-size: 0.95rem;
+            border-bottom: none;
+        }
+
+        .law-body .article-list li::before {
+            content: '•';
+            color: var(--logo-cream);
+        }
+        
+        .definitions-list li::before {
+            content: counter(list-item) ".";
+            color: var(--logo-cream);
+            font-weight: bold;
+            font-size: 1em;
+            margin-top: 0;
+        }
+
+        .definitions-list ol {
+            counter-reset: item;
+        }
+
+        .definitions-list li {
+            counter-increment: item;
+        }
+
+        .definitions-list li strong {
+            color: var(--primary-red);
+            font-weight: 700;
+            margin-left: 8px;
+        }
+
+        .sub-heading {
+            color: var(--logo-cream);
+            font-size: 1.1rem;
+            padding: 15px 30px 5px;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+        }
+
+        /* تنسيقات خاصة للحظر والتحذيرات */
+        .restricted { color: #f9d86b !important; }
+        .restricted::before { content: '❌' !important; color: #ff0000 !important; }
+        .allowed { color: #81c784 !important; }
+        .allowed::before { content: '✅' !important; color: #388e3c !important; }
+        .warning { color: var(--primary-red); font-weight: 700; }
+        
+        /* تنسيق الخاتمة والتواقيع */
+        .law-body .signature-area {
+            text-align: center;
+            padding: 30px;
+            margin-top: 20px;
+            border-top: 1px solid var(--dark-border);
+        }
+
+        .law-body .signature-area p {
+            margin-top: 15px;
+            font-weight: 700;
+        }
+
+        .law-body .signature {
+            color: var(--primary-red);
+            margin: 5px 0 20px;
+            font-style: italic;
+        }
+
+
+        /* --- الفوتر --- */
+        footer {
+            margin-top: 50px;
+            padding: 40px 20px;
+            background: #000;
+            border-top: 3px solid var(--primary-red);
+            text-align: center;
+        }
+
+        .contact-links {
+            margin: 20px 0;
+        }
+
+        .btn-contact {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--primary-red);
+            border: 1px solid var(--primary-red);
+            color: var(--text-white);
+            text-decoration: none;
+            margin: 0 8px;
+            border-radius: 6px;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-contact:hover {
+            background: #A81B2C;
+            box-shadow: 0 0 20px rgba(215, 38, 61, 0.7);
+            transform: translateY(-2px);
+        }
+
+        /* استجابة للجوال */
+        @media (max-width: 768px) {
+            .logo-title { font-size: 2.5rem; }
+            .logo-text { font-size: 1.2rem; }
+            .law-header h3 { font-size: 1rem; }
+            .btn-contact { display: block; margin: 10px auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-overlay"></div>
+
+    <header>
+        <div class="logo-container">
+            <h1 class="logo-title">MYSTERY<span>RP</span></h1> 
+            <p class="logo-text">دليل القوانين الشامل</p>
+            <p class="logo-sub">سيرفر MTRp</p>
+        </div>
+
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-box" placeholder="ابحث عن مادة، باب، عقوبة...">
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="law-card">
+            <div class="law-header">
+                <h3><i class="fas fa-gavel"></i> دستور ولاية سان أندرياس الرسمي</h3>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="law-body">
+                <div style="padding: 15px 30px;">
+                    <h2 class="chapter-title" style="color: var(--logo-cream); font-size: 1.6rem;">دستور ولاية سان أندرياس الرسمي</h2>
+                    <p style="text-align: center; color: var(--text-gray); margin-bottom: 20px;">(الإصدار النهائي المعتمد)</p>
+                </div>
+
+                <h4 class="chapter-title">الباب الأول: الدولة ونظام الحكم</h4>
+                <div class="article-section">
+                    <p class="article">المادة 1:</p>
+                    <ul class="article-list"><li>ولاية سان أندرياس ولاية ذات سيادة، وعاصمتها لوس سانتوس.</li></ul>
+                    <p class="article">المادة 2:</p>
+                    <ul class="article-list"><li>نظام الحكم ديمقراطي نيابي، يقوم على الفصل بين السلطات.</li></ul>
+                    <p class="article">المادة 3:</p>
+                    <ul class="article-list"><li>اللغة الرسمية هي العربية، والعملة الرسمية هي الدولار.</li></ul>
+                    <p class="article">المادة 4:</p>
+                    <ul class="article-list"><li>يضمن الدستور حرية ممارسة الأنشطة الاقتصادية ضمن الأطر القانونية.</li></ul>
+                </div>
+
+                <h4 class="chapter-title">الباب الثاني: السلطة التشريعية</h4>
+                <div class="article-section">
+                    <p class="article">المادة 5: يتألف المجلس التشريعي من:</p>
+                    <ul class="article-list">
+                        <li>مجلس الشورى (15 عضواً)</li>
+                        <li>مجلس النواب (30 عضواً)</li>
+                    </ul>
+                    <p class="article">المادة 6: يختص المجلس التشريعي بما يلي:</p>
+                    <ul class="article-list">
+                        <li>سن القوانين واللوائح</li>
+                        <li>الرقابة على أداء الجهات التنفيذية</li>
+                        <li>إقرار الميزانية العامة</li>
+                    </ul>
+                    <p class="article">المادة 7:</p>
+                    <ul class="article-list"><li>مدة العضوية في المجلس ستة أشهر قابلة للتجديد.</li></ul>
+                </div>
+
+                <h4 class="chapter-title">الباب الثالث: السلطة التنفيذية</h4>
+                <div class="article-section">
+                    <h4 class="sub-heading" style="color: var(--primary-red); padding: 5px 0 5px 0;">الفصل الأول: رئيس الولاية</h4>
+                    <p class="article">المادة 8:</p>
+                    <ul class="article-list"><li>ينتخب رئيس الولاية كل سنة من قبل المجلس التشريعي.</li></ul>
+                    <p class="article">المادة 9: يتولى رئيس الولاية:</p>
+                    <ul class="article-list">
+                        <li>تمثيل الولاية داخلياً وخارجياً</li>
+                        <li>الإشراف على الجهات التنفيذية</li>
+                        <li>توقيع القوانين وإصدار اللوائح</li>
+                    </ul>
+                    <h4 class="sub-heading" style="color: var(--primary-red); padding: 5px 0 5px 0;">الفصل الثاني: الجهات التنفيذية</h4>
+                    <p class="article">المادة 10: تتكون السلطة التنفيذية من:</p>
+                    <ul class="article-list">
+                        <li>وزارة الداخلية (الشرطة)</li>
+                        <li>وزارة الصحة (الإسعاف)</li>
+                        <li>وزارة العدل (القضاء)</li>
+                        <li>وزارة المالية (الضرائب والجمارك)</li>
+                    </ul>
+                </div>
+
+                <h4 class="chapter-title">الباب الرابع: السلطة القضائية</h4>
+                <div class="article-section">
+                    <p class="article">المادة 11:</p>
+                    <ul class="article-list"><li>القضاء سلطة مستقلة، ويتولى الفصل في المنازعات.</li></ul>
+                    <p class="article">المادة 12: يتألف النظام القضائي من:</p>
+                    <ul class="article-list">
+                        <li>المحكمة الابتدائية (للقضايا البسيطة)</li>
+                        <li>محكمة الاستئناف (للقضايا المتوسطة)</li>
+                        <li>المحكمة العليا (للقضايا الكبرى والدستورية)</li>
+                    </ul>
+                    <p class="article">المادة 13:</p>
+                    <ul class="article-list"><li>حق التقاضي مكفول للجميع، وتكون جلسات المحاكم علنية.</li></ul>
+                </div>
+
+                <h4 class="chapter-title">الباب الخامس: الحقوق والواجبات العامة</h4>
+                <div class="article-section">
+                    <p class="article">المادة 14:</p>
+                    <ul class="article-list"><li>المواطنون متساوون في الحقوق والواجبات.</li></ul>
+                    <p class="article">المادة 15:</p>
+                    <ul class="article-list"><li>تكفل الدولة حرية التعبير والاجتماع ضمن الأطر القانونية.</li></ul>
+                    <p class="article">المادة 16:</p>
+                    <ul class="article-list"><li>للمواطن حق التملك، ولا يجوز نزع الملكية إلا للمنفعة العامة.</li></ul>
+                    <p class="article">المادة 17: على المواطنين:</p>
+                    <ul class="article-list">
+                        <li>احترام القوانين والأنظمة</li>
+                        <li>دفع الضرائب المفروضة</li>
+                        <li>المساهمة في الحفاظ على الأمن</li>
+                    </ul>
+                </div>
+                
+                <h4 class="chapter-title">الباب السادس: النظام الجنائي</h4>
+                <div class="article-section">
+                    <h4 class="sub-heading" style="color: var(--primary-red); padding: 5px 0 5px 0;">الفصل الأول: الجرائم والعقوبات</h4>
+                    <p class="article">المادة 18: جرائم الدرجة الأولى (العقوبة: السجن الدائم أو الإعدام):</p>
+                    <ul class="article-list">
+                        <li>الخيانة العظمى</li>
+                        <li>القتل العمد مع سبق الإصرار</li>
+                        <li>الإرهاب وتخريب الممتلكات العامة</li>
+                    </ul>
+                    <p class="article">المادة 19: جرائم الدرجة الثانية (العقوبة: السجن من 10-20 سنة):</p>
+                    <ul class="article-list">
+                        <li>السطو المسلح</li>
+                        <li>الاختطاف</li>
+                        <li>الفساد المالي الكبير</li>
+                    </ul>
+                    <p class="article">المادة 20: جرائم الدرجة الثالثة (العقوبة: السجن حتى 10 سنوات):</p>
+                    <ul class="article-list">
+                        <li>الاعتداء على الموظفين العموميين</li>
+                        <li>تزوير الوثائق الرسمية</li>
+                        <li>التهريب الجمركي</li>
+                    </ul>
+                    <p class="article">المادة 21: جنح (العقوبة: الغرامة أو السجن حتى سنة):</p>
+                    <ul class="article-list">
+                        <li>القيادة under influence</li>
+                        <li>الشغب البسيط</li>
+                        <li>الإخلال بالنظام العام</li>
+                    </ul>
+                    
+                    <h4 class="sub-heading" style="color: var(--primary-red); padding: 5px 0 5px 0;">الفصل الثاني: إجراءات المحاكمة</h4>
+                    <p class="article">المادة 22: يحق للمتهم:</p>
+                    <ul class="article-list">
+                        <li>الاستعانة بمحامٍ</li>
+                        <li>الاطلاع على الأدلة</li>
+                        <li>الطعن في الأحكام</li>
+                    </ul>
+                    <p class="article">المادة 23:</p>
+                    <ul class="article-list"><li>تحدد مدة المحاكمة بـ 72 ساعة كحد أقصى.</li></ul>
+                </div>
+
+                <h4 class="chapter-title">الباب السابع: النظام المالي والاقتصادي</h4>
+                <div class="article-section">
+                    <p class="article">المادة 24: تفرض الضرائب على:</p>
+                    <ul class="article-list">
+                        <li>الدخل الشخصي</li>
+                        <li>المبيعات التجارية</li>
+                        <li>الاستيراد والتصدير</li>
+                    </ul>
+                    <p class="article">المادة 25:</p>
+                    <ul class="article-list"><li>تحدد الميزانية السنوية من قبل المجلس التشريعي.</li></ul>
+                    <p class="article">المادة 26:</p>
+                    <ul class="article-list"><li>يشرف البنك المركزي على النظام المالي والنقدي.</li></ul>
+                </div>
+
+                <h4 class="chapter-title">الباب الثامن: الأحكام العامة</h4>
+                <div class="article-section">
+                    <p class="article">المادة 27:</p>
+                    <ul class="article-list"><li>يحق للإدارة تعديل الدستور بأغلبية ثلثي المجلس التشريعي.</li></ul>
+                    <p class="article">المادة 28:</p>
+                    <ul class="article-list"><li>ينشر الدستور في الجريدة الرسمية ويعمل به من تاريخ إقراره.</li></ul>
+                    <p class="article">المادة 29:</p>
+                    <ul class="article-list"><li>تختص المحكمة العليا بتفسير نصوص الدستور.</li></ul>
+                </div>
+                
+                <h4 class="chapter-title">اللائحة التنفيذية للدستور</h4>
+                <div class="article-section">
+                    <p class="article">المادة 30: تحدد اللوائح التنفيذية:</p>
+                    <ul class="article-list">
+                        <li>هيكل الجهات الحكومية</li>
+                        <li>الرواتب والمكافآت</li>
+                        <li>الإجراءات التفصيلية للخدمات</li>
+                    </ul>
+                    <p class="article">المادة 31:</p>
+                    <ul class="article-list"><li>تصدر اللوائح بقرار من رئيس الولاية بعد موافقة المجلس.</li></ul>
+                </div>
+
+                <div class="signature-area">
+                    <h4 class="sub-heading" style="color: var(--logo-cream); padding: 5px 0 5px 0;">خاتمة الدستور</h4>
+                    <p style="color: var(--text-gray); font-style: italic; margin-bottom: 25px;">
+                        ملاحظة: هذا الدستور قابل للتعديل حسب متطلبات تطور الولاية، ويتم تعديله عبر الآليات الدستورية المقررة.
+                    </p>
+
+                    <p>رئيس الولاية:</p>
+                    <p class="signature">[التوقيع]</p>
+
+                    <p>رئيس المجلس التشريعي:</p>
+                    <p class="signature">[التوقيع]</p>
+
+                    <p>رئيس المحكمة العليا:</p>
+                    <p class="signature">[التوقيع]</p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="law-card">
+            <div class="law-header">
+                <h3><i class="fas fa-theater-mask"></i> مصطلحات الرول بلاي الأساسية</h3>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="law-body definitions-list">
+                <ol>
+                    <li>**IC (In Character):** التصرف بدور شخصيتك داخل اللعبة. (مثال: التحدث كشخصيتك وليس كلاعب)</li>
+                    <li>**OOC (Out Of Character):** التحدث خارج نطاق الشخصية. (مسموح فقط في القنوات المخصصة)</li>
+                    <li>**RP (RolePlay):** لعب الأدوار والتفاعل كشخصية حقيقية.</li>
+                    <li>**NLR (New Life Rule):** قاعدة الحياة الجديدة بعد الموت.</li>
+                    <li>**RDM (Random Deathmatch):** القتل العشوائي بدون سبب.</li>
+                    <li>**VDM (Vehicle Deathmatch):** استخدام المركبة كسلاح للدهس.</li>
+                    <li>**Fear RP:** إظهار الخوف على الحياة في المواقف الخطرة.</li>
+                    <li>**Meta Gaming:** استخدام معلومات خارجية في اللعبة.</li>
+                    <li>**Power Gaming:** إجبار أفعال على لاعب آخر.</li>
+                    <li>**Combat Logging:** الخروج من السيرفر أثناء المواقف الخطرة.</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="law-card">
+            <div class="law-header">
+                <h3><i class="fas fa-globe"></i> 1. القوانين العامة</h3>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="law-body">
+                <ul>
+                    <li>المبادئ الأساسية للعب والنزاهة</li>
+                    <li>حقوق وواجبات اللاعبين</li>
+                    <li>آداب التواصل والسلوك</li>
+                    <li>العقوبات المشتركة بين جميع الأقسام</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="law-card">
+            <div class="law-header">
+                <h3><i class="fas fa-shield-alt"></i> 2. المناطق الآمنة والمحظورة</h3>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="law-body">
+                <h4 class="sub-heading">🏢 مناطق الوظائف الحكومية</h4>
+                <ul>
+                    <li>**المناطق:** مركز الشرطة الرئيسي، مقر القضاء والمحاكم، مبنى البلدية.</li>
+                    <li class="restricted">**الممنوع:** جميع الأعمال الإجرامية، استخدام الأسلحة، التهديد أو الترويع.</li>
+                </ul>
+                <h4 class="sub-heading">🏥 المستشفيات والعيادات</h4>
+                <ul>
+                    <li>**المناطق:** المستشفى الرئيسي، العيادات المتخصصة، مراكز الإسعاف.</li>
+                    <li class="restricted">**الممنوع:** الاعتداء على المرضى أو الكوادر الطبية، عرقلة عمل الإسعاف، أي أعمال عنف داخل المنشآت الطبية.</li>
+                </ul>
+                <h4 class="sub-heading">⛽ مناطق الخدمات الأساسية</h4>
+                <ul>
+                    <li>**المناطق:** محطات الوقود، مراكز الصيانة، الأسواق المركزية.</li>
+                    <li class="allowed">**المسموح:** الأنشطة التجارية المشروعة، التفاعلات الاجتماعية الطبيعية.</li>
+                    <li class="restricted">**الممنوع:** الأعمال الإجرامية المنظمة.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="law-card">
+            <div class="law-header">
+                <h3><i class="fas fa-handcuffs"></i> 3. قوانين الإجرام</h3>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="law-body">
+                <ul>
+                    <li>تراخيص وتصاريح الأنشطة الإجرامية</li>
+                    <li>حدود الصراعات بين العصابات</li>
+                    <li>قواعد العمليات الإجرامية الكبرى</li>
+                    <li>عقوبات انتهاك القوانين الإجرامية</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="law-card">
+            <div class="law-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> نظام العقوبات</h3>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="law-body">
+                <h4 class="sub-heading warning">⚠ المخالفات البسيطة</h4>
+                <ul>
+                    <li>التجول بدون ملابس، القيادة غير المنتظمة.</li>
+                    <li>**العقوبة:** إنذار ← غرامة مالية.</li>
+                </ul>
+                <h4 class="sub-heading warning">🔥 المخالفات المتوسطة</h4>
+                <ul>
+                    <li>RDM بسيط، VDM غير متعمد.</li>
+                    <li>**العقوبة:** حظر 24 ساعة + غرامة.</li>
+                </ul>
+                <h4 class="sub-heading warning">🚨 المخالفات الكبرى</h4>
+                <ul>
+                    <li>الاختراق أو الغش، Meta Gaming متعمد.</li>
+                    <li>**العقوبة:** حظر أسبوع أو دائم.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="law-card">
+            <div class="law-header">
+                <h3><i class="fas fa-users"></i> حقوق المواطنين</h3>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="law-body">
+                <h4 class="sub-heading">🛡️ الحق في الحياة الآمنة</h4>
+                <ul>
+                    <li>عدم التعرض للاعتداء بدون سبب</li>
+                    <li>الحق في الحماية من قبل الجهات المختصة</li>
+                </ul>
+                <h4 class="sub-heading">💰 الحق في الملكية</h4>
+                <ul>
+                    <li>حماية الممتلكات الشخصية</li>
+                    <li>التعويض في حال التلف</li>
+                </ul>
+                <h4 class="sub-heading">⚖️ الحق في العدالة</h4>
+                <ul>
+                    <li>محاكمة عادلة ونزيهة</li>
+                    <li>الاستئناف على القرارات</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="law-card">
+            <div class="law-header">
+                <h3><i class="fab fa-discord"></i> قوانين الديسكورد</h3>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="law-body">
+                <ul>
+                    <li>آداب استخدام منصات التواصل</li>
+                    <li>قنوات التواصل الرسمية</li>
+                    <li>سياسة الخصوصية والأمان</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="law-card">
+            <div class="law-header">
+                <h3><i class="fas fa-police-box"></i> قوانين الشرطة</h3>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="law-body">
+                <ul>
+                    <li>واجبات وصلاحيات رجال الشرطة</li>
+                    <li>بروتوكولات التعامل مع المواقف</li>
+                    <li>استخدام القوة وتصعيدها</li>
+                    <li>نظام الترقيات والعقوبات الداخلية</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="law-card">
+            <div class="law-header">
+                <h3><i class="fas fa-headset"></i> طرق التواصل الرسمية</h3>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="law-body">
+                <h4 class="sub-heading">✉️ للشكاوى</h4>
+                <ul>
+                    <li>نظام التذاكر في الديسكورد</li>
+                    <li>البريد الإلكتروني للإدارة</li>
+                    <li>قنوات الطوارئ في اللعبة</li>
+                </ul>
+                <h4 class="sub-heading">💡 للمقترحات</h4>
+                <ul>
+                    <li>قسم المقترحات في الديسكورد</li>
+                    <li>الاستبيانات الدورية</li>
+                    <li>اللقاءات الشهرية مع المجتمع</li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <h3>للاتصال والإبلاغ</h3>
+            <div class="contact-links">
+                <a href="#" class="btn-contact"><i class="fas fa-ticket-alt"></i> نظام التذاكر والشكاوى</a>
+                <a href="#" class="btn-contact"><i class="fas fa-bug"></i> الإبلاغ عن المخالفات</a>
+            </div>
+            <p class="update-note">* سيتم تحديث القوانين دورياً حسب احتياجات المجتمع</p>
+            <p class="copyright">&copy; 2025 MysteryRP - جميع الحقوق محفوظة</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. وظيفة القوائم المنسدلة (Accordion)
+            const cards = document.querySelectorAll('.law-card');
+
+            cards.forEach(card => {
+                const header = card.querySelector('.law-header');
+                
+                header.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                    
+                    const body = card.querySelector('.law-body');
+                    if (card.classList.contains('active')) {
+                        // يتم حساب ارتفاع الجسم (body) بشكل ديناميكي لفتحه
+                        body.style.maxHeight = body.scrollHeight + "px";
+                    } else {
+                        body.style.maxHeight = null;
+                    }
+                });
+            });
+
+            // 2. وظيفة محرك البحث المتقدم
+            const searchInput = document.getElementById('searchInput');
+
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+
+                cards.forEach(card => {
+                    const headerText = card.querySelector('.law-header h3').innerText.toLowerCase();
+                    const bodyContent = card.querySelector('.law-body').innerText.toLowerCase();
+                    let hasMatch = false;
+
+                    // البحث في العنوان ومحتوى الجسم بالكامل
+                    if (headerText.includes(term) || bodyContent.includes(term)) {
+                        hasMatch = true;
+                    }
+
+                    if (hasMatch) {
+                        card.style.display = "block";
+                        
+                        // فتح القائمة تلقائياً عند البحث
+                        if (term.length > 0) {
+                            if (!card.classList.contains('active')) {
+                                card.classList.add('active');
+                                const body = card.querySelector('.law-body');
+                                body.style.maxHeight = body.scrollHeight + "px";
+                            }
+                        }
+                    } else {
+                        card.style.display = "none";
+                    }
+
+                    // إعادة الوضع الطبيعي عند مسح البحث
+                    if (term.length === 0) {
+                        card.style.display = "block";
+                        card.classList.remove('active');
+                        card.querySelector('.law-body').style.maxHeight = null;
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
